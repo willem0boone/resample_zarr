@@ -2,6 +2,7 @@ import xarray
 import datatree
 import numpy as np
 import xarray as xr
+from typing import Union
 from ndpyramid import pyramid_reproject
 from carbonplan_data.metadata import get_cf_global_attrs
 
@@ -21,20 +22,30 @@ def combine_datasets(datasets):
     return combined_ds
 
 
-def expand_to_global_coverage(ds: xr.Dataset,
-                              step_lon: float | int,
-                              step_lat: float | int
-                              ) -> xr.Dataset:
+def expand_to_global_coverage(
+        ds: xr.Dataset,
+        step_lon: Union[float, int],
+        step_lat: Union[float, int]
+    ) -> xr.Dataset:
     """
-    Expand a dataset to have global coverage lat -90 to 90 and lon -180 to 180.
-    The resolution is defined by the steps given as input. The output contains
-    the original dataset completed with nan values for the lat/lon ranges where
-    no data was available.
-    :param ds: xr.Dataset, original dataset. should have coordinate 'longitude'
-     and 'latitude'.
-    :param step_lon: int or float: resolution of new ds.
-    :param step_lat: int or float: resolution of new ds.
-    :return:  xr.Dataset.
+    Expands a dataset to cover the global latitude and longitude range of
+    -90 to 90 degrees latitude and -180 to 180 degrees longitude. The resolution
+    of the expanded dataset is defined by the step sizes provided. Areas where
+    the original dataset did not have data are filled with NaN values.
+
+    :param ds: The original xarray.Dataset, which should have coordinates
+        'longitude' and 'latitude'.
+    :type ds: xr.Dataset
+
+    :param step_lon: The resolution of the new dataset in the longitude dimension.
+    :type step_lon: Union[float, int]
+
+    :param step_lat: The resolution of the new dataset in the latitude dimension.
+    :type step_lat: Union[float, int]
+
+    :return: An xarray.Dataset that covers the global latitude and longitude range
+        with the specified resolution.
+    :rtype: xr.Dataset
     """
     # Create the global latitude and longitude arrays
     global_lat = np.arange(-90, 90 + step_lat, step_lat)
@@ -110,7 +121,6 @@ def make_pyramid(ds, pixels_per_tile, version, levels) -> datatree.DataTree:
     merged_pyramid.ds = xr.Dataset(
         attrs=get_cf_global_attrs(version=version))
 
-
     for child in pyramid.children:
         ds = _merge_layers(child.ds, pixels_per_tile)
 
@@ -119,8 +129,6 @@ def make_pyramid(ds, pixels_per_tile, version, levels) -> datatree.DataTree:
 
         ds['variable'] = ds['variable'].astype('<U50')
         ds['all_variables'] = ds['all_variables'].astype(np.float32)
-
-
 
         merged_pyramid[child.name] = set_zarr_encoding(
             ds, codec_config={"id": "zlib", "level": 1}, float_dtype="float32"

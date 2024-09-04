@@ -18,20 +18,31 @@ def extract_public_s3_zarr(
         var: Optional[str] = None,
         lon_range: Optional[Tuple[float, float]] = None,
         lat_range: Optional[Tuple[float, float]] = None,
-        debug: Optional[bool] = False,
-) -> xr.Dataset:
+        debug: Optional[bool] = False
+    ) -> xr.Dataset:
     """
     Extracts a subset of data from a public S3 Zarr store within specified
     longitude and latitude ranges.
 
     :param url: The URL of the Zarr store.
-    :param var: Optional[string], name of the variable to be extracted.
-    :param lon_range: A tuple specifying the range of longitudes to extract
-    (default: (-30, 70)).
-    :param lat_range: A tuple specifying the range of latitudes to extract
-    (default: (-15, 90)).
-    :param debug: If True, enable debugging output (default: False).
-    :return: A xarray Dataset containing the extracted data.
+    :type url: str
+
+    :param var: The name of the variable to be extracted.
+    :type var: Optional[str]
+
+    :param lon_range: A tuple specifying the range of longitudes to extract.
+        Defaults to (-30, 70) if not provided.
+    :type lon_range: Optional[Tuple[float, float]]
+
+    :param lat_range: A tuple specifying the range of latitudes to extract.
+        Defaults to (-15, 90) if not provided.
+    :type lat_range: Optional[Tuple[float, float]]
+
+    :param debug: If True, enable debugging output. Defaults to False.
+    :type debug: Optional[bool]
+
+    :return: An xarray Dataset containing the extracted data.
+    :rtype: xr.Dataset
     """
 
     # Open the Zarr store
@@ -181,20 +192,32 @@ def extract_web_nc(
         var: Optional[str] = None,
         lon_range: Optional[Tuple[float, float]] = None,
         lat_range: Optional[Tuple[float, float]] = None,
-        debug: Optional[bool] = False,
-) -> xr.Dataset:
+        debug: Optional[bool] = False
+    ) -> xr.Dataset:
     """
     Extract data from a Bio-Oracle NetCDF file. The NetCDF file will be
-    streamed into memory, data from the specified lat-lon range is read.
+    streamed into memory, and data from the specified latitude and longitude
+    range will be read.
 
-    :param url: string, URL of the NetCDF file from e.g. Bio-Oracle.
-    :param var: Optional[string], name of the variable to be extracted.
-    :param lon_range: Optional[Tuple[float, float]] - A tuple specifying the
-    range of longitudes to extract. Default is None.
-    :param lat_range: Optional[Tuple[float, float]] - A tuple specifying the
-    range of latitudes to. Default is None.
-    :param debug: Optional[bool], if True, print debugging statements.
-    :return: xarray.Dataset containing the extracted data.
+    :param url: The URL of the NetCDF file, e.g., from Bio-Oracle.
+    :type url: str
+
+    :param var: The name of the variable to be extracted.
+    :type var: Optional[str]
+
+    :param lon_range: A tuple specifying the range of longitudes to extract.
+        Defaults to None, meaning no longitude range is applied.
+    :type lon_range: Optional[Tuple[float, float]]
+
+    :param lat_range: A tuple specifying the range of latitudes to extract.
+        Defaults to None, meaning no latitude range is applied.
+    :type lat_range: Optional[Tuple[float, float]]
+
+    :param debug: If True, print debugging statements. Defaults to False.
+    :type debug: Optional[bool]
+
+    :return: An xarray Dataset containing the extracted data.
+    :rtype: xr.Dataset
     """
     # Download the file content using requests
     response = requests.get(url)
@@ -239,7 +262,7 @@ def _extract_tif(
         lat_range: Optional[Tuple[float, float]] = (-15, 90),
         lon_step: Optional[float] = 0.5,
         lat_step: Optional[float] = 0.5,
-):
+    ):
     """
     Extracts data from a window in a geotif to an array. Extend and shape of
     the window are determined by the provided params.

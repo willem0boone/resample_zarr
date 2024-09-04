@@ -3,6 +3,7 @@ API
 
 .. autosummary::
    :toctree: generated
+   :noindex:
 
 .. automodule:: resampling
    :members:

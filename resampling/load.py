@@ -21,6 +21,7 @@ def write_zarr_local(merged_pyramid: datatree.DataTree,
                      ) -> None:
     """
     Load a dataset to a storage component.
+
     :param merged_pyramid: xarray datatree
     :param name: string name for export.zarr.
     :param store: path to storage, e.g. c://documents. Is optional, default is
@@ -58,6 +59,7 @@ def write_zarr_s3(
 
     """
     Load pyramid to object storage.
+
     :param mode: Optional[str], mode of zarr writing.
     :param dataset: datatree.DataTree | xarray.Dataset
     :param endpoint_url: S3 endpoint. Default is in config.
@@ -134,6 +136,7 @@ def write_batch_s3_zarr(zarr_store_path: str,
     """
     Update a batch of data in a Zarr store located on S3 at the specified
     indices.
+
     :param zarr_store_path: Path to the Zarr store on S3.
     :type zarr_store_path: str
     :param variable_name: Name of the variable to update.
@@ -170,7 +173,7 @@ def _create_empty_ds(
         coordinate_ranges:
         Dict[str, List[Union[int, List[int], np.datetime64]]],
         variables: List[str]
-) -> xr.Dataset:
+    ) -> xr.Dataset:
 
     coords = {}
     dimensions = []
@@ -199,23 +202,25 @@ def _create_empty_ds(
     return ds
 
 
-def create_empty_zarr_local(zarr_name: str,
-                            coordinate_ranges:
-                            Dict[str, List[Union[int, List[int]]]],
-                            variables: List[str]) -> xr.Dataset:
+def create_empty_zarr_local(
+        zarr_name: str,
+        coordinate_ranges: Dict[str, List[Union[int, List[int]]]],
+        variables: List[str]
+    ) -> xr.Dataset:
     """
     Create an empty Zarr dataset with the specified coordinate ranges and
     variables.
 
     :param zarr_name: The name of the Zarr store to create.
     :type zarr_name: str
+
     :param coordinate_ranges: A dictionary where keys are dimension names and
-    values are ranges.
-        The ranges can be:
+        values specify the ranges for each dimension. The ranges can be:
         - A list of two integers specifying the start and stop values.
-        - A list of intervals (each interval being a list of two integers).
-        - A single integer.
+        - A list of intervals, where each interval is a list of two integers.
+        - A single integer specifying the size of the dimension.
     :type coordinate_ranges: Dict[str, List[Union[int, List[int]]]]
+
     :param variables: A list of variable names to include in the dataset.
     :type variables: List[str]
 
@@ -230,23 +235,25 @@ def create_empty_zarr_local(zarr_name: str,
     return ds
 
 
-def create_empty_zarr_s3(zarr_name: str,
-                         coordinate_ranges:
-                         Dict[str, List[Union[int, List[int]]]],
-                         variables: List[str]) -> xr.Dataset:
+def create_empty_zarr_s3(
+        zarr_name: str,
+        coordinate_ranges: Dict[str, List[Union[int, List[int]]]],
+        variables: List[str]
+    ) -> xr.Dataset:
     """
     Create an empty Zarr dataset with the specified coordinate ranges and
-    variables.
+    variables, to be stored in an S3 bucket.
 
     :param zarr_name: The name of the Zarr store to create.
     :type zarr_name: str
+
     :param coordinate_ranges: A dictionary where keys are dimension names and
-    values are ranges.
-        The ranges can be:
+        values specify the ranges for each dimension. The ranges can be:
         - A list of two integers specifying the start and stop values.
-        - A list of intervals (each interval being a list of two integers).
-        - A single integer.
+        - A list of intervals, where each interval is a list of two integers.
+        - A single integer specifying the size of the dimension.
     :type coordinate_ranges: Dict[str, List[Union[int, List[int]]]]
+
     :param variables: A list of variable names to include in the dataset.
     :type variables: List[str]
 
@@ -265,34 +272,39 @@ def delete_s3_zarr(
         zarr_store_path: str,
         endpoint_url: Optional[str] = config.settings.endpoint_url,
         aws_access_key_id: Optional[str] = config.settings.aws_access_key_id,
-        aws_secret_access_key: Optional[str] =
-        config.settings.aws_secret_access_key,
+        aws_secret_access_key: Optional[str] = config.settings.aws_secret_access_key,
         aws_session_token: Optional[str] = config.settings.aws_session_token,
-        bucket: Optional[str] = config.settings.bucket,
-) -> None:
+        bucket: Optional[str] = config.settings.bucket
+    ) -> None:
     """
     Deletes a Zarr file or directory from an S3 bucket.
 
     :param zarr_store_path: The path to the Zarr file or directory within the
-    bucket.
+        bucket.
     :type zarr_store_path: str
-    :param endpoint_url: Optional endpoint URL for the S3 service.
+
+    :param endpoint_url: Optional; the endpoint URL for the S3 service.
     :type endpoint_url: Optional[str]
-    :param aws_access_key_id: Optional AWS access key ID.
+
+    :param aws_access_key_id: Optional; AWS access key ID for authentication.
     :type aws_access_key_id: Optional[str]
-    :param aws_secret_access_key: Optional AWS secret access key.
+
+    :param aws_secret_access_key: Optional; AWS secret access key for authentication.
     :type aws_secret_access_key: Optional[str]
-    :param aws_session_token: Optional AWS session token.
+
+    :param aws_session_token: Optional; AWS session token for temporary credentials.
     :type aws_session_token: Optional[str]
-    :param bucket: Optional S3 bucket name. If not provided, should be part of
-    zarr_store_path.
+
+    :param bucket: Optional; S3 bucket name. If not provided, it should be part of
+        the `zarr_store_path`.
     :type bucket: Optional[str]
+
     :return: None
     :rtype: None
-    :raises ValueError: If bucket is not provided and not part of
-    zarr_store_path.
+
+    :raises ValueError: If `bucket` is not provided and is not part of `zarr_store_path`.
     :raises FileNotFoundError: If the Zarr store does not exist in the bucket.
-    :raises Exception: For other errors during deletion.
+    :raises Exception: For other errors that occur during the deletion process.
     """
     # Initialize S3FileSystem with the provided credentials and endpoint URL
     s3 = s3fs.S3FileSystem(

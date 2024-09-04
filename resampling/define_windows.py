@@ -21,14 +21,36 @@ def convert_to_datetime(value: Union[int, float, datetime]) -> np.datetime64:
 
 
 def convert_to_timedelta(value: Union[int, float]) -> np.timedelta64:
-    """Convert days or a similar unit to np.timedelta64."""
+    """
+
+    Parameters
+    ----------
+    value
+
+    Returns
+    -------
+
+    """
     return np.timedelta64(int(value), 'D')
 
 
 def _handle_datetime_dimension(start: np.datetime64, stop: np.datetime64,
                                step: np.timedelta64, invert: bool) -> Tuple[
     List[np.datetime64], List[int]]:
-    """Generate intervals and indices for datetime dimensions."""
+    """
+
+    Parameters
+    ----------
+    start
+    stop
+    step
+    invert
+
+    Returns
+    -------
+
+    """
+
     intervals = []
     indices = []
     index = 0
@@ -50,7 +72,19 @@ def _handle_datetime_dimension(start: np.datetime64, stop: np.datetime64,
 def _handle_numeric_dimension(start: float, stop: float, step: float,
                               invert: bool) -> Tuple[
     List[Union[float, List[float]]], List[int]]:
-    """Generate intervals and indices for numeric dimensions."""
+    """
+
+    Parameters
+    ----------
+    start
+    stop
+    step
+    invert
+
+    Returns
+    -------
+
+    """
     intervals = []
     indices = []
     index = 0
@@ -79,7 +113,16 @@ def _handle_numeric_dimension(start: float, stop: float, step: float,
 def _process_resampler_dimension(
         dimension: Dict[str, Any]
 ) -> Tuple[Dict[str, Any], Dict[str, int]]:
-    """Process each dimension specified in the resampler."""
+    """
+
+    Parameters
+    ----------
+    dimension
+
+    Returns
+    -------
+
+    """
 
     name = dimension["dimension"]
 
@@ -125,8 +168,17 @@ def _process_resampler_dimension(
 def _get_missing_dimensions(ds: xr.Dataset,
                             specified_dimensions: set
                             ) -> Tuple[Dict[str, Any], Dict[str, int]]:
-    """Handle dimensions in the dataset that are not specified in the
-    resampler."""
+    """
+
+    Parameters
+    ----------
+    ds
+    specified_dimensions
+
+    Returns
+    -------
+
+    """
     dimensions = {}
     dimension_indices = {}
 
@@ -150,11 +202,9 @@ def define_windows(
         resampler: List[Dict[str, Any]],
         ds: xr.Dataset
     ) -> Tuple[
-
-    List[Dict[str, Union[int, float, List[Union[int, float]]]]],
-
-    List[Dict[str, int]],
-         Dict[str, List[Union[int, List[Union[int, float]]]]]
+        List[Dict[str, Union[int, float, List[Union[int, float]]]]],
+        List[Dict[str, int]],
+        Dict[str, List[Union[int, List[Union[int, float]]]]]
     ]:
     """
     Defines the windows (intervals) for each dimension based on the provided
@@ -167,13 +217,13 @@ def define_windows(
           The range of the dimension. It can be a single value or a tuple
           specifying the start and stop values.
         - "step" (Optional[Union[int, float]]): The step size for creating
-           intervals. Defaults to 1 if not provided.
+          intervals. Defaults to 1 if not provided.
         - "invert" (Optional[bool]): If True, the intervals for this dimension
-           are reversed. Defaults to False.
+          are reversed. Defaults to False.
 
     :type resampler: List[Dict[str, Any]]
 
-    :param ds: the xarray dataset to compare the resampler with.
+    :param ds: The xarray dataset to compare the resampler with.
     :type ds: xarray.Dataset
 
     :return: A tuple containing:
