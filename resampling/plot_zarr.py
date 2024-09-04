@@ -74,7 +74,7 @@ def plot_dataset(ds, var, name):
     # Add labels and title
     ax.set_xlabel('Longitude')
     ax.set_ylabel('Latitude')
-    ax.set_title()
+    ax.set_title(name)
 
     plt.savefig(f"{name}.png")
     plt.close()
