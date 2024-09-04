@@ -2,10 +2,10 @@ boto3==1.34.80
 botocore==1.34.80
 carbonplan_data==0.4.0
 dacite==1.8.1
-matplotlib==3.8.3
+matplotlib
 
 numcodecs==0.12.1
-numpy==2.1.0
+numpy
 pandas==2.2.2
 psutil==5.9.8
 rasterio==1.3.9
