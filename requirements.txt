@@ -2,10 +2,8 @@ boto3==1.34.80
 botocore==1.34.51
 carbonplan_data==0.4.0
 dacite==1.8.1
-datatree==0.1.dev91+g54edbf7.d20240611
 matplotlib==3.8.3
-ndpyramid==0.1.0
-ndpyramid==0.0.post61
+
 numcodecs==0.12.1
 numpy==2.1.0
 pandas==2.2.2
@@ -20,3 +18,6 @@ xarray==2024.7.0
 xarray_datatree==0.0.14
 sphinx==7.1.2
 sphinx-rtd-theme==1.3.0rc1
+
+git+https://github.com/TomNicholas/datatree@54edbf77fdc756b74bfca00986f4a68e04643b29
+git+https://github.com/carbonplan/ndpyramid@5ab3745cc42f2dd1e384f7c9f82dac071cfde1dc
