@@ -10,3 +10,5 @@ Contents
 
    usage
    api
+   modules
+   resampling
