@@ -212,34 +212,34 @@ def define_windows(
     but not specified in the resampler.
 
     :param resampler: A list of dictionaries where each dictionary specifies:
-        dimension (str): The name of the dimension;
-        range (Union[int, Tuple[Union[int, float], Union[int, float]]]):
-        The range of the dimension. It can be a single value or a tuple indicating
-        the start and stop values;
-        step (Optional[Union[int, float]]): The step size for creating intervals.
-        Defaults to 1 if not provided;
-        invert (Optional[bool]): If True, the intervals for this dimension are
-        reversed. Defaults to False;
+        - dimension (str): The name of the dimension.
+        - range (Union[int, Tuple[Union[int, float], Union[int, float]]]):
+          The range of the dimension. It can be a single value or a tuple
+          indicating the start and stop values.
+        - step (Optional[Union[int, float]]): The step size for creating intervals.
+          Defaults to 1 if not provided.
+        - invert (Optional[bool]): If True, the intervals for this dimension are
+          reversed. Defaults to False.
 
     :type resampler: List[Dict[str, Any]]
 
     :param ds: The xarray dataset to compare the resampler with.
-    
+
     :type ds: xarray.Dataset
 
     :return: A tuple containing:
-        A list of dictionaries where each dictionary represents a combination of
-        intervals for each dimension;
-        A list of dictionaries where each dictionary represents a combination of
-        indices for each dimension;
-        A dictionary where keys are dimension names and values are lists of
-        intervals for each dimension;
+        - A list of dictionaries where each dictionary represents a combination of
+          intervals for each dimension.
+        - A list of dictionaries where each dictionary represents a combination of
+          indices for each dimension.
+        - A dictionary where keys are dimension names and values are lists of
+          intervals for each dimension.
 
     :rtype: Tuple[
         List[Dict[str, Union[int, float, List[Union[int, float]]]]],
         List[Dict[str, int]],
         Dict[str, List[Union[int, List[Union[int, float]]]]]
-    ]
+        ]
     """
 
     specified_dimensions = set(
