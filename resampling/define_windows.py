@@ -208,14 +208,14 @@ def define_windows(
     ]:
     """
     Defines the windows (intervals) for each dimension based on the provided
-    resampler configuration, including any dimensions present in the dataset
-    but not in the resampler.
+    resampler configuration, and includes any dimensions present in the dataset
+    but not specified in the resampler.
 
-    :param resampler: A list of dictionaries where each dictionary contains:
+    :param resampler: A list of dictionaries where each dictionary specifies:
         - "dimension" (str): The name of the dimension.
         - "range" (Union[int, Tuple[Union[int, float], Union[int, float]]]):
-          The range of the dimension. It can be a single value or a tuple
-          specifying the start and stop values.
+          The range of the dimension, which can be a single value or a tuple
+          indicating the start and stop values.
         - "step" (Optional[Union[int, float]]): The step size for creating
           intervals. Defaults to 1 if not provided.
         - "invert" (Optional[bool]): If True, the intervals for this dimension
@@ -227,12 +227,12 @@ def define_windows(
     :type ds: xarray.Dataset
 
     :return: A tuple containing:
-        - A list of dictionaries representing all possible combinations of
+        - A list of dictionaries where each dictionary represents a combination
+          of intervals for each dimension.
+        - A list of dictionaries where each dictionary represents a combination
+          of indices for each dimension.
+        - A dictionary where keys are dimension names and values are lists of
           intervals for each dimension.
-        - A list of dictionaries representing all possible combinations of
-          indices for each dimension.
-        - A dictionary where the keys are dimension names and the values are
-          lists of intervals for each dimension.
 
     :rtype: Tuple[
         List[Dict[str, Union[int, float, List[Union[int, float]]]]],
