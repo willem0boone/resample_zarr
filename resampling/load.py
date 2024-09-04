@@ -15,18 +15,29 @@ from resampling.extract import extract_private_s3_zarr
 config = Config()
 
 
-def write_zarr_local(merged_pyramid: datatree.DataTree,
-                     name: Optional[str] = None,
-                     store: Optional[str] = None,
-                     ) -> None:
+def write_zarr_local(
+        merged_pyramid: datatree.DataTree,
+        name: Optional[str] = None,
+        store: Optional[str] = None
+) -> None:
     """
-    Load a dataset to a storage component.
+    Save a dataset to a local Zarr store.
 
-    :param merged_pyramid: xarray datatree
-    :param name: string name for export.zarr.
-    :param store: path to storage, e.g. c://documents. Is optional, default is
-    storage in project directory.
-    :return: No return.
+    :param merged_pyramid: The dataset to be saved, represented as a
+        `datatree.DataTree` object.
+    :type merged_pyramid: datatree.DataTree
+
+    :param name: Optional name for the Zarr store file. If not provided, a
+        default name will be used.
+    :type name: Optional[str]
+
+    :param store: Optional path to the storage location where the Zarr store
+        will be saved. If not provided, the default location is the project
+        directory.
+    :type store: Optional[str]
+
+    :return: None
+    :rtype: None
     """
     if not name:
         name = f"pyramid_edito_{dt.datetime.now().strftime("%Y-%m-%d %H-%M")
