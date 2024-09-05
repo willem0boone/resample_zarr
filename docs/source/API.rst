@@ -1,4 +1,4 @@
-resampling package
+API
 ==================
 
 object_store
@@ -33,7 +33,7 @@ down\_scale
    :undoc-members:
    :show-inheritance:
 
-resampling.plot\_logs
+plot\_logs
 ----------------------------
 
 .. automodule:: resampling.plot_logs
@@ -41,7 +41,7 @@ resampling.plot\_logs
    :undoc-members:
    :show-inheritance:
 
-resampling.plot\_zarr
+plot\_zarr
 ----------------------------
 
 .. automodule:: resampling.plot_zarr
@@ -49,7 +49,7 @@ resampling.plot\_zarr
    :undoc-members:
    :show-inheritance:
 
-resampling.transform
+transform
 ---------------------------
 
 .. automodule:: resampling.transform
