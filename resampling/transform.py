@@ -13,7 +13,9 @@ from resampling._utils import compute_grid_area
 def combine_datasets(datasets):
     """
     Combine multiple xarray.Dataset objects into a single dataset.
+
     :param datasets: (list of xarray.Dataset): List of datasets to combine.
+
     :return combined_ds (xarray.Dataset): Combined dataset.
     """
     # Merge the combined dataset along overlapping coordinates
@@ -29,22 +31,25 @@ def expand_to_global_coverage(
     ) -> xr.Dataset:
     """
     Expands a dataset to cover the global latitude and longitude range of
-    -90 to 90 degrees latitude and -180 to 180 degrees longitude. The resolution
-    of the expanded dataset is defined by the step sizes provided. Areas where
-    the original dataset did not have data are filled with NaN values.
+    -90 to 90 degrees latitude and -180 to 180 degrees longitude. The
+    resolution of the expanded dataset is defined by the step sizes provided.
+    Areas where the original dataset did not have data are filled with NaN
+    values.
 
     :param ds: The original xarray.Dataset, which should have coordinates
         'longitude' and 'latitude'.
     :type ds: xr.Dataset
 
-    :param step_lon: The resolution of the new dataset in the longitude dimension.
+    :param step_lon: The resolution of the new dataset in the longitude
+        dimension.
     :type step_lon: Union[float, int]
 
-    :param step_lat: The resolution of the new dataset in the latitude dimension.
+    :param step_lat: The resolution of the new dataset in the latitude
+        dimension.
     :type step_lat: Union[float, int]
 
-    :return: An xarray.Dataset that covers the global latitude and longitude range
-        with the specified resolution.
+    :return: A xarray.Dataset that covers the global latitude and longitude
+        range with the specified resolution.
     :rtype: xr.Dataset
     """
     # Create the global latitude and longitude arrays
@@ -89,10 +94,15 @@ def make_pyramid(ds, pixels_per_tile, version, levels) -> datatree.DataTree:
     """
     Transform xarray dataset into datatree pyramid ready to be used in
     carbonplan smart viewer.
+
     :param ds: Xarray.Dataset
+
     :param pixels_per_tile:
+
     :param version: will be stored as output dataset parameter
+
     :param levels: int, number of zoomlevels in the pyramid.
+
     :return: xarray datatree.
     """
     def _merge_layers(ds: xarray.Dataset, pixels_per_tile: int):

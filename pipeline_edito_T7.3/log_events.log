@@ -412,3 +412,39 @@
 2024-09-03 16:35:35,029 - >> Working on VAR elevation - batch 399/400:windows [199000-199500]/200000
 2024-09-03 16:35:39,612 - >> Working on VAR elevation - batch 400/400:windows [199500-200000]/200000
 2024-09-03 16:35:43,895 - >> Finished VAR elevation
+2024-09-05 15:06:12,648 - Downscaling to dataset: tst_bathymetry.zarr
+2024-09-05 15:06:17,228 - >> Working on VAR elevation - batch 1/5:windows [0-500]/2400
+2024-09-05 15:06:46,179 - >> Working on VAR elevation - batch 2/5:windows [500-1000]/2400
+2024-09-05 15:07:12,826 - >> Working on VAR elevation - batch 3/5:windows [1000-1500]/2400
+2024-09-05 15:07:29,481 - >> Working on VAR elevation - batch 4/5:windows [1500-2000]/2400
+2024-09-05 15:07:53,012 - Downscaling to dataset: tst_bathymetry.zarr
+2024-09-05 15:07:53,491 - tst_bathymetry.zarr already exists, it will be deleted and a new empyt zarr will be created
+2024-09-05 15:08:43,589 - Downscaling to dataset: tst_bathymetry.zarr
+2024-09-05 15:08:44,073 - tst_bathymetry.zarr already exists, it will be deleted and a new empyt zarr will be created
+2024-09-05 15:09:34,581 - Downscaling to dataset: tst_bathymetry.zarr
+2024-09-05 15:09:35,078 - tst_bathymetry.zarr already exists, it will be deleted and a new empyt zarr will be created
+2024-09-05 15:10:12,443 - Downscaling to dataset: tst_bathymetry.zarr
+2024-09-05 15:10:12,928 - tst_bathymetry.zarr already exists, it will be deleted and a new empyt zarr will be created
+2024-09-05 15:10:41,505 - Downscaling to dataset: tst_bathymetry.zarr
+2024-09-05 15:10:46,021 - >> Working on VAR elevation - batch 1/5:windows [0-500]/2400
+2024-09-05 15:11:20,266 - >> Working on VAR elevation - batch 2/5:windows [500-1000]/2400
+2024-09-05 15:11:47,699 - >> Working on VAR elevation - batch 3/5:windows [1000-1500]/2400
+2024-09-05 15:12:06,149 - >> Working on VAR elevation - batch 4/5:windows [1500-2000]/2400
+2024-09-05 15:14:18,123 - Downscaling to dataset: tst_bathymetry.zarr
+2024-09-05 15:14:18,600 - tst_bathymetry.zarr already exists, it will be deleted and a new empyt zarr will be created
+2024-09-05 15:15:00,871 - Downscaling to dataset: tst_bathymetry.zarr
+2024-09-05 15:15:05,276 - >> Working on VAR elevation - batch 1/2:windows [0-500]/600
+2024-09-05 15:15:39,108 - >> Working on VAR elevation - batch 2/2:windows [500-1000]/600
+2024-09-05 15:15:42,082 - >> Finished VAR elevation
+2024-09-05 15:18:42,844 - Downscaling to dataset: tst_bathymetry.zarr
+2024-09-05 15:18:43,331 - tst_bathymetry.zarr already exists, it will be deleted and a new empyt zarr will be created
+2024-09-05 15:19:16,787 - Downscaling to dataset: tst_bathymetry.zarr
+2024-09-05 15:19:21,731 - >> Working on VAR elevation - batch 1/2:windows [0-500]/600
+2024-09-05 15:20:10,738 - >> Working on VAR elevation - batch 2/2:windows [500-1000]/600
+2024-09-05 15:20:13,921 - >> Finished VAR elevation
+2024-09-05 15:23:10,831 - Downscaling to dataset: tst_bathymetry.zarr
+2024-09-05 15:23:11,331 - tst_bathymetry.zarr already exists, it will be deleted and a new empyt zarr will be created
+2024-09-05 15:23:33,331 - Downscaling to dataset: tst_bathymetry.zarr
+2024-09-05 15:23:38,838 - >> Working on VAR elevation - batch 1/2:windows [0-500]/600
+2024-09-05 15:24:08,805 - >> Working on VAR elevation - batch 2/2:windows [500-1000]/600
+2024-09-05 15:24:11,786 - >> Finished VAR elevation

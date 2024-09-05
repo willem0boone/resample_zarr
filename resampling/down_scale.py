@@ -1,4 +1,3 @@
-import logging
 import numpy as np
 import xarray as xr
 import pandas as pd
@@ -14,11 +13,10 @@ from tenacity import stop_after_attempt
 from concurrent.futures import as_completed
 from concurrent.futures import ThreadPoolExecutor
 
-from resampling.load import delete_s3_zarr
-from resampling.load import write_batch_s3_zarr
-from resampling.load import create_empty_zarr_s3
-from resampling.extract import check_s3_zarr_exists
-from resampling._define_windows import define_windows
+from resampling._loggers import setup_logger
+from resampling._loggers import ResourceMonitor
+from resampling.object_store import ObjectStore
+from resampling.define_windows import define_windows
 
 
 def down_scale_on_the_fly(
@@ -90,59 +88,34 @@ def down_scale_on_the_fly(
 
 def down_scale_in_batches(
     ds: xr.Dataset,
+    my_store: ObjectStore,
     dest_zarr: str,
     resampler: List[Dict[str, Union[str, float, Tuple[float, float], bool]]],
     variables: List[str],
     batch_size: int,
     workers: int,
-    logger: Optional[logging.Logger] = None
+    logs: Optional[bool] = True
 ) -> None:
-    """
-    Downscale an `xarray.Dataset` in batches and write the results to a Zarr store on S3.
 
-    This function performs downscaling of the dataset in batches to manage memory usage and
-    improve performance. It divides the data into smaller chunks, processes each chunk,
-    and writes the results to a specified Zarr store on S3.
+    resource_monitor = ResourceMonitor()
+    resource_monitor.start_monitor_resources()
+    logger = setup_logger()
 
-    :param ds: The `xarray.Dataset` to downscale.
-    :type ds: xarray.Dataset
-    :param dest_zarr: The path to the destination Zarr store on S3 where the downscaled data will be saved.
-    :type dest_zarr: str
-    :param resampler: A list of dictionaries specifying the resampling parameters for each dimension.
-        Each dictionary must include:
-        - **dimension** (str): The name of the dimension to resample.
-        - **step** (float): The step size for the resampling.
-        - **range** (Tuple[float, float]): The range of values for the dimension as (start, end).
-        - **invert** (bool, optional): Whether to invert the dimension coordinates. Defaults to False.
-    :type resampler: list of dicts
-    :param variables: A list of variable names to process within the dataset.
-    :type variables: list of str
-    :param batch_size: The number of windows to process in each batch.
-    :type batch_size: int
-    :param workers: The number of parallel workers to use for processing batches.
-    :type workers: int
-    :param logger: Optional logger for logging progress and status. If not provided, no logging is performed.
-    :type logger: Optional[logging.Logger]
-
-    :return: None
-    :rtype: None
-
-    :raises ValueError: If the target Zarr store already exists and cannot be deleted.
-    """
+    logger.info(f"Downscaling to dataset: {dest_zarr}")
 
     windows, indices, dimensions = define_windows(resampler, ds)
 
     # Check if the target Zarr store exists
-    exists = check_s3_zarr_exists(dest_zarr)
+    exists = my_store.check_s3_zarr_exists(dest_zarr)
     if exists:
         if logger:
             logger.info(f"{dest_zarr} already exists, it will be deleted and"
                         f" a new empyt zarr will be created")
-        delete_s3_zarr(dest_zarr)
+        my_store.delete_s3_zarr(dest_zarr)
 
-    create_empty_zarr_s3(zarr_name=dest_zarr,
-                         coordinate_ranges=dimensions,
-                         variables=variables)
+    my_store.create_empty_zarr(zarr_name=dest_zarr,
+                               coordinate_ranges=dimensions,
+                               variables=variables)
     total_windows = len(windows)
 
     for variable in variables:
@@ -166,10 +139,11 @@ def down_scale_in_batches(
                                         )
 
             # Write the batch to the Zarr store
-            write_batch_s3_zarr(zarr_store_path=dest_zarr,
-                                variable_name=variable,
-                                batch_values=means,
-                                indexes=batch_of_indices)
+            my_store.write_batch_s3_zarr(
+                zarr_store_path=dest_zarr,
+                variable_name=variable,
+                batch_values=means,
+                indexes=batch_of_indices)
         if logger:
             logger.info(f">> Finished VAR {variable}")
 

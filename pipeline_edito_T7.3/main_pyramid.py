@@ -1,11 +1,12 @@
 import numpy as np
 import xarray as xr
 import pandas as pd
-from resampling._config import Config
-from resampling.load import write_zarr_s3
+from resampling.my_store import get_my_store
 from resampling.transform import make_pyramid
 from resampling.transform import expand_to_global_coverage
-from resampling.extract import extract_private_s3_zarr
+
+# setup connection with object store
+my_store = get_my_store()
 
 
 def extract_all_ds():
@@ -14,8 +15,7 @@ def extract_all_ds():
     ds = xr.Dataset()
 
     for i, item in enumerate(datasets.itertuples()):
-        my_s3_ds = extract_private_s3_zarr(
-            name=f"EDITO_DUC_{item.dataset}.zarr")
+        my_s3_ds = my_store.extract_zarr(name=f"EDITO_DUC_{item.dataset}.zarr")
         var = item.var
 
         for time_index in range(len(my_s3_ds.time)):
@@ -35,7 +35,7 @@ def extract_all_ds():
                             "longitude": my_s3_ds.longitude.values
                             }
                 )
-    my_s3_ds = extract_private_s3_zarr(name="EDITO_DUC_bathymetry.zarr")
+    my_s3_ds = my_store.extract_zarr(name="EDITO_DUC_bathymetry.zarr")
     ds["elevation"] = xr.DataArray(
         my_s3_ds["elevation"].values,
         dims=("latitude", "longitude"),
@@ -44,11 +44,6 @@ def extract_all_ds():
 
 
 if __name__ == "__main__":
-
-    # -------------------------------------------------------------------------
-    # SETTINGS
-    # -------------------------------------------------------------------------
-    config = Config()
 
     # -------------------------------------------------------------------------
     # EXTRACT
@@ -79,5 +74,5 @@ if __name__ == "__main__":
     # -------------------------------------------------------------------------
     print("-"*50)
     print('phase 3: loading data')
-    write_zarr_s3(merged_pyramid, name="EDITO_DUC_pyramid.zarr")
+    my_store.write_zarr(merged_pyramid, name="EDITO_DUC_pyramid.zarr")
 
