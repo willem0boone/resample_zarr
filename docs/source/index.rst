@@ -7,8 +7,6 @@ Contents
 --------
 
 .. toctree::
-
    usage
-   api
-   modules
-   resampling
+   API
+
