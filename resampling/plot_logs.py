@@ -107,7 +107,8 @@ def plot_resource_log(
     threads. The x-axis represents timestamps.
 
     :param logfile: Path to the resource log file. Default is
-    'log_resources.log'.
+        'log_resources.log'.
+
     :type logfile: Optional[str]
 
     :return: None
@@ -240,7 +241,8 @@ def plot_logs(
     as well as event markers for variable (VAR) events.
 
     :param resource_log: Path to the resource log file. Default is
-    'log_resources.log'.
+        'log_resources.log'.
+
     :type resource_log: Optional[str]
 
     :param event_log: Path to the event log file. Default is 'log_events.log'.
@@ -248,6 +250,7 @@ def plot_logs(
 
     :param show: If True, display the plot. If False, save the plot to a file.
         Default is False.
+
     :type show: Optional[bool]
 
     :return: None
