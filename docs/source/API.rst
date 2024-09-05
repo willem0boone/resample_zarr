@@ -1,34 +1,34 @@
 resampling package
 ==================
 
-resampling.down\_scale
+object_store
+-----------------------------
+
+.. automodule:: resampling.object_store
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+my_store
+-----------------------------
+
+.. automodule:: resampling.my_store
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+define_windows
+-----------------------------
+
+.. automodule:: resampling.define_windows
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+down\_scale
 -----------------------------
 
 .. automodule:: resampling.down_scale
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-resampling.extract
--------------------------
-
-.. automodule:: resampling.extract
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-resampling.load
-----------------------
-
-.. automodule:: resampling.load
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-resampling.loggers
--------------------------
-
-.. automodule:: resampling.loggers
    :members:
    :undoc-members:
    :show-inheritance:
