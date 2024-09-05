@@ -24,7 +24,7 @@ class Config:
     def __init__(self):
         self._config_file = os.path.join(
             os.path.dirname(os.path.abspath(__file__)),
-            "config.toml")
+            "config/config.toml")
         self._set_config(self._config_file)
 
     @property
@@ -51,3 +51,4 @@ class Config:
         :return: path to config file.
         """
         return self._config_file
+

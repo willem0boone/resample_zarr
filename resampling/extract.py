@@ -2,47 +2,64 @@ import io
 import s3fs
 import xarray
 import requests
+import datatree
 import xarray as xr
+import datetime as dt
+import rasterio as rio
 from typing import Tuple
 from typing import Optional
-import rasterio as rio
+from resampling._config import Config
 from rasterio.windows import from_bounds
-from resampling.config import Config
+
 
 # call config for default settings
 config = Config()
 
 
 def extract_public_s3_zarr(
-        url: str,
-        var: Optional[str] = None,
-        lon_range: Optional[Tuple[float, float]] = None,
-        lat_range: Optional[Tuple[float, float]] = None,
-        debug: Optional[bool] = False
-    ) -> xr.Dataset:
+    url: str,
+    var: Optional[str] = None,
+    lon_range: Optional[Tuple[float, float]] = None,
+    lat_range: Optional[Tuple[float, float]] = None,
+    debug: Optional[bool] = False
+) -> xr.Dataset:
     """
-    Extracts a subset of data from a public S3 Zarr store within specified
+    Extract a subset of data from a public S3 Zarr store within specified
     longitude and latitude ranges.
 
-    :param url: The URL of the Zarr store.
+    This function opens a Zarr store from a public S3 URL, optionally renames
+    coordinate dimensions to standard names, subsets the dataset to the
+    specified geographic ranges, and extracts a particular variable if
+    specified. Debugging output can be enabled to display information about
+    the data subset.
+
+    :param url: The URL of the Zarr store from which data is to be extracted.
     :type url: str
 
-    :param var: The name of the variable to be extracted.
+    :param var: The name of the variable to be extracted from the dataset.
+        If None, all variables are included. Defaults to None.
     :type var: Optional[str]
 
-    :param lon_range: A tuple specifying the range of longitudes to extract.
-        Defaults to (-30, 70) if not provided.
+    :param lon_range: A tuple specifying the range of longitudes to extract,
+        given as (min_lon, max_lon). Defaults to None, which means no longitude
+        subsetting is performed.
     :type lon_range: Optional[Tuple[float, float]]
 
-    :param lat_range: A tuple specifying the range of latitudes to extract.
-        Defaults to (-15, 90) if not provided.
+    :param lat_range: A tuple specifying the range of latitudes to extract,
+        given as (min_lat, max_lat). Defaults to None, which means no latitude
+        subsetting is performed.
     :type lat_range: Optional[Tuple[float, float]]
 
-    :param debug: If True, enable debugging output. Defaults to False.
+    :param debug: If True, enables debugging output to display the shape of
+        the data subset and the dataset coordinates. Defaults to False.
     :type debug: Optional[bool]
 
-    :return: An xarray Dataset containing the extracted data.
-    :rtype: xr.Dataset
+    :return: An `xarray.Dataset` containing the extracted data subset. If a
+        variable name is specified, returns the specific variable as an
+        `xarray.DataArray`.
+    :rtype: xr.Dataset or xr.DataArray
+
+    :raises ValueError: If the specified variable is not found in the dataset.
     """
 
     # Open the Zarr store
@@ -78,34 +95,56 @@ def extract_public_s3_zarr(
 
 
 def extract_private_s3_zarr(
-        name: str,
-        var: Optional[str] = None,
-        lon_range: Optional[Tuple[float, float]] = None,
-        lat_range: Optional[Tuple[float, float]] = None,
-        endpoint_url: Optional[str] = config.settings.endpoint_url,
-        aws_access_key_id: Optional[str] = config.settings.aws_access_key_id,
-        aws_secret_access_key: Optional[
-            str] = config.settings.aws_secret_access_key,
-        aws_session_token: Optional[str] = config.settings.aws_session_token,
-        bucket: Optional[str] = config.settings.bucket,
-
+    name: str,
+    var: Optional[str] = None,
+    lon_range: Optional[Tuple[float, float]] = None,
+    lat_range: Optional[Tuple[float, float]] = None,
+    endpoint_url: Optional[str] = config.settings.endpoint_url,
+    aws_access_key_id: Optional[str] = config.settings.aws_access_key_id,
+    aws_secret_access_key: Optional[str] =
+    config.settings.aws_secret_access_key,
+    aws_session_token: Optional[str] = config.settings.aws_session_token,
+    bucket: Optional[str] = config.settings.bucket,
 ) -> xarray.Dataset:
     """
-    Open a Zarr store from S3 object storage.
-    :param var: Optional[string], name of the variable to be extracted.
-    :param endpoint_url: str - S3 endpoint. Default is in config.
-    :param aws_access_key_id: str - S3 access key. Default is in config.
-    :param aws_secret_access_key: str - S3 secret key. Default is in config.
-    :param aws_session_token: str - S3 session token. Default is in config.
-    :param bucket: str - S3 bucket. Default is in config.
-    :param name: str - Name of the Zarr store to open.
-    :param lon_range: Optional[Tuple[float, float]] - A tuple specifying the
-    range of longitudes to extract. Default is None.
-    :param lat_range: Optional[Tuple[float, float]] - A tuple specifying the
-    range of latitudes to. Default is None.
-    :param var: Optional[string], name of the variable to be extracted.
+    Extract a Zarr dataset from a private S3 bucket.
 
-    :return: xarray.Dataset - The dataset loaded from the Zarr store.
+    :param name: Name of the dataset.
+    :type name: str
+
+    :param var: Variable to extract, if specified. Default is None.
+    :type var: Optional[str]
+
+    :param lon_range: Longitude range as a tuple of (min_lon, max_lon).
+    Default is None.
+    :type lon_range: Optional[Tuple[float, float]]
+
+    :param lat_range: Latitude range as a tuple of (min_lat, max_lat).
+    Default is None.
+    :type lat_range: Optional[Tuple[float, float]]
+
+    :param endpoint_url: S3 endpoint URL. If not provided, defaults to the
+    value in the `TOML` configuration file.
+    :type endpoint_url: Optional[str]
+
+    :param aws_access_key_id: AWS access key ID. If not provided, defaults to
+    the value in the `TOML` configuration file.
+    :type aws_access_key_id: Optional[str]
+
+    :param aws_secret_access_key: AWS secret access key. If not provided,
+    defaults to the value in the `TOML` configuration file.
+    :type aws_secret_access_key: Optional[str]
+
+    :param aws_session_token: AWS session token. If not provided, defaults to
+    the value in the `TOML` configuration file.
+    :type aws_session_token: Optional[str]
+
+    :param bucket: S3 bucket name. If not provided, defaults to the value in
+    the `TOML` configuration file.
+    :type bucket: Optional[str]
+
+    :return: The extracted dataset as an xarray Dataset.
+    :rtype: xarray.Dataset
     """
 
     bucket = bucket + "/" + name
@@ -144,18 +183,79 @@ def extract_private_s3_zarr(
     return ds
 
 
-def check_s3_zarr_exists(
-        zarr_store_path: str,
-        endpoint_url: Optional[str] = config.settings.endpoint_url,
-        aws_access_key_id: Optional[str] = config.settings.aws_access_key_id,
-        aws_secret_access_key: Optional[str] =
-        config.settings.aws_secret_access_key,
-        aws_session_token: Optional[str] = config.settings.aws_session_token,
-        bucket: Optional[str] = config.settings.bucket,
-) -> bool:
+def write_zarr_s3(
+    dataset: datatree.DataTree | xr.Dataset,
+    name: Optional[str] = None,
+    mode: Optional[str] = None,
+    endpoint_url: Optional[str] = config.settings.endpoint_url,
+    aws_access_key_id: Optional[str] = config.settings.aws_access_key_id,
+    aws_secret_access_key: Optional[str] =
+    config.settings.aws_secret_access_key,
+    aws_session_token: Optional[str] = config.settings.aws_session_token,
+    bucket: Optional[str] = config.settings.bucket,
+) -> None:
     """
-    Checks if a Zarr store exists in the specified S3 bucket.
+    Write a Zarr dataset to an S3 bucket.
+
+    This function writes an `xarray.Dataset` or `datatree.DataTree` object to
+    an S3 bucket as a Zarr store. It supports specifying the Zarr store name,
+    mode of writing, and AWS credentials. If no name is provided, a default
+    name with a timestamp will be generated.
+
+    :param dataset: The dataset to be written to the Zarr store. Can be either
+        an `xarray.Dataset` or `datatree.DataTree`.
+    :type dataset: datatree.DataTree | xr.Dataset
+
+    :param name: The name of the Zarr store to be created. If not provided,
+        a default name based on the current timestamp will be used.
+    :type name: Optional[str]
+
+    :param mode: The mode for writing the Zarr store. If not provided, defaults
+        to 'w' (write mode). Other modes such as 'a' (append) may be supported
+        depending on the Zarr library implementation.
+    :type mode: Optional[str]
+
+    :param endpoint_url: The S3 endpoint URL. If not provided, defaults to
+        the value in the `TOML` configuration file.
+    :type endpoint_url: Optional[str]
+
+    :param aws_access_key_id: The AWS access key ID. If not provided, defaults
+        to the value in the `TOML` configuration file.
+    :type aws_access_key_id: Optional[str]
+
+    :param aws_secret_access_key: The AWS secret access key. If not provided,
+        defaults to the value in the `TOML` configuration file.
+    :type aws_secret_access_key: Optional[str]
+
+    :param aws_session_token: The AWS session token. If not provided, defaults
+        to the value in the `TOML` configuration file.
+    :type aws_session_token: Optional[str]
+
+    :param bucket: The S3 bucket name where the Zarr store will be created.
+        If not provided, defaults to the value in the `TOML` configuration
+        file.
+    :type bucket: Optional[str]
+
+    :return: None
+    :rtype: None
+
+    :raises ValueError: If `bucket` or `dataset` is not provided.
+
+    :raises Exception: If there is an error during the Zarr store creation or
+    writing process.
+
+    .. note::
+        The `s3fs` library is used to handle interactions with the S3 bucket.
+        Ensure that `s3fs` and `zarr` libraries are installed and properly
+        configured.
     """
+    if mode is None:
+        mode = "w"
+
+    if not name:
+        name = f"new_zarr_{dt.datetime.now().strftime('%Y-%m-%d_%H-%M')}.zarr"
+    bucket = bucket + "/" + name
+
     s3 = s3fs.S3FileSystem(
         key=aws_access_key_id,
         secret=aws_secret_access_key,
@@ -163,31 +263,15 @@ def check_s3_zarr_exists(
         client_kwargs={'endpoint_url': endpoint_url}
     )
 
-    # Check if bucket name is provided
-    if not bucket:
-        raise ValueError("Bucket name must be provided.")
+    store = s3fs.S3Map(root=bucket, s3=s3, create=True)
 
-    # Construct the full path to the Zarr store
-    full_path = f"{bucket}/{zarr_store_path}"
-
-    # Check if the path exists
-    try:
-        # Using the `ls` method to check if directory exists
-        if s3.exists(full_path):
-            # Check if it's a directory (Zarr store)
-            if s3.isdir(full_path):
-                return True
-            else:
-                print(f"The path '{full_path}' exists but is not a directory.")
-                return False
-        else:
-            return False
-    except Exception as e:
-        print(f"Error checking S3 path: {e}")
-        return False
+    dataset.to_zarr(store=store,
+                    consolidated=True,
+                    mode=mode
+                    )
 
 
-def extract_web_nc(
+def _extract_web_nc(
         url: str,
         var: Optional[str] = None,
         lon_range: Optional[Tuple[float, float]] = None,

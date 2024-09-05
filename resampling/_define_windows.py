@@ -9,8 +9,7 @@ from typing import Union
 from datetime import datetime
 
 
-def convert_to_datetime(value: Union[int, float, datetime]) -> np.datetime64:
-    """Convert a timestamp or datetime to np.datetime64."""
+def _convert_to_datetime(value: Union[int, float, datetime]) -> np.datetime64:
     if isinstance(value, datetime):
         return np.datetime64(value)
     elif isinstance(value, (int, float)):
@@ -20,36 +19,14 @@ def convert_to_datetime(value: Union[int, float, datetime]) -> np.datetime64:
             f"Unsupported type for datetime conversion: {type(value)}")
 
 
-def convert_to_timedelta(value: Union[int, float]) -> np.timedelta64:
-    """
-
-    Parameters
-    ----------
-    value
-
-    Returns
-    -------
-
-    """
+def _convert_to_timedelta(value: Union[int, float]) -> np.timedelta64:
     return np.timedelta64(int(value), 'D')
 
 
-def _handle_datetime_dimension(start: np.datetime64, stop: np.datetime64,
-                               step: np.timedelta64, invert: bool) -> Tuple[
-    List[np.datetime64], List[int]]:
-    """
-
-    Parameters
-    ----------
-    start
-    stop
-    step
-    invert
-
-    Returns
-    -------
-
-    """
+def _handle_datetime_dimension(
+        start: np.datetime64, stop: np.datetime64,
+        step: np.timedelta64, invert: bool
+) -> Tuple[List[np.datetime64], List[int]]:
 
     intervals = []
     indices = []
@@ -69,22 +46,13 @@ def _handle_datetime_dimension(start: np.datetime64, stop: np.datetime64,
     return intervals, indices
 
 
-def _handle_numeric_dimension(start: float, stop: float, step: float,
-                              invert: bool) -> Tuple[
-    List[Union[float, List[float]]], List[int]]:
-    """
+def _handle_numeric_dimension(
+        start: float,
+        stop: float,
+        step: float,
+        invert: bool
+) -> Tuple[List[Union[float, List[float]]], List[int]]:
 
-    Parameters
-    ----------
-    start
-    stop
-    step
-    invert
-
-    Returns
-    -------
-
-    """
     intervals = []
     indices = []
     index = 0
@@ -113,16 +81,6 @@ def _handle_numeric_dimension(start: float, stop: float, step: float,
 def _process_resampler_dimension(
         dimension: Dict[str, Any]
 ) -> Tuple[Dict[str, Any], Dict[str, int]]:
-    """
-
-    Parameters
-    ----------
-    dimension
-
-    Returns
-    -------
-
-    """
 
     name = dimension["dimension"]
 
@@ -130,26 +88,26 @@ def _process_resampler_dimension(
 
         start, stop = dimension["range"]
 
-        step = convert_to_timedelta(dimension.get("step", 1)) \
+        step = _convert_to_timedelta(dimension.get("step", 1)) \
             if isinstance(start, datetime) or isinstance(stop, datetime) \
             else float(dimension.get("step", 1))
 
-        start = convert_to_datetime(start) \
+        start = _convert_to_datetime(start) \
             if isinstance(start, datetime) \
             else float(start)
 
-        stop = convert_to_datetime(stop) \
+        stop = _convert_to_datetime(stop) \
             if isinstance(stop, datetime) \
             else float(stop)
 
     else:
-        start = convert_to_datetime(dimension["range"]) \
+        start = _convert_to_datetime(dimension["range"]) \
             if isinstance(dimension["range"], datetime) \
             else float(dimension["range"])
 
         stop = start
 
-        step = convert_to_timedelta(1) \
+        step = _convert_to_timedelta(1) \
             if isinstance(start, np.datetime64) \
             else 1
 
@@ -165,20 +123,11 @@ def _process_resampler_dimension(
     return {name: intervals}, {name: indices}
 
 
-def _get_missing_dimensions(ds: xr.Dataset,
-                            specified_dimensions: set
-                            ) -> Tuple[Dict[str, Any], Dict[str, int]]:
-    """
+def _get_missing_dimensions(
+        ds: xr.Dataset,
+        specified_dimensions: set
+) -> Tuple[Dict[str, Any], Dict[str, int]]:
 
-    Parameters
-    ----------
-    ds
-    specified_dimensions
-
-    Returns
-    -------
-
-    """
     dimensions = {}
     dimension_indices = {}
 

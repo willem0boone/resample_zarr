@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
-
-import numpy as np
+import xarray as xr
+# import numpy as np
 # import cartopy.crs as ccrs
 # import cartopy.feature as cfeature
 # from cartopy.mpl.gridliner import LatitudeFormatter
@@ -59,13 +59,41 @@ import numpy as np
 #     plt.close()
 
 
-def plot_dataset(ds, var, name):
-    fig, ax = plt.subplots()
+def plot_dataset(
+        ds: xr.Dataset,
+        var: str,
+        name: str
+) -> None:
+    """
+    Plots a variable from an xarray Dataset as an image.
+
+    This function extracts the specified variable from the xarray Dataset,
+    visualizes it using `imshow`, and saves the plot as a PNG file.
+
+    :param ds: The xarray Dataset containing the variable to plot.
+    :type ds: xr.Dataset
+
+    :param var: The name of the variable to plot from the Dataset.
+    :type var: str
+
+    :param name: The name to use for the output PNG file (excluding extension).
+    :type name: str
+
+    :return: None
+    :rtype: None
+
+    :raises KeyError: If the variable `var` is not found in the Dataset.
+    :raises ValueError: If the Dataset does not contain the variable data.
+    """
+    # Check if the variable exists in the Dataset
+    if var not in ds:
+        raise KeyError(f"Variable '{var}' not found in the Dataset.")
 
     # Extract values and coordinates
     values = ds[var].values
 
     # Plot using imshow
+    fig, ax = plt.subplots()
     cax = ax.imshow(values, cmap='viridis')
 
     # Add colorbar
@@ -77,5 +105,6 @@ def plot_dataset(ds, var, name):
     ax.set_ylabel('Latitude')
     ax.set_title(name)
 
+    # Save the plot as a PNG file
     plt.savefig(f"{name}.png")
     plt.close()

@@ -8,14 +8,14 @@ from typing import Dict
 from typing import List
 from typing import Union
 from typing import Optional
-from resampling.config import Config
+from resampling._config import Config
 from resampling.extract import extract_private_s3_zarr
 
 # call config for default settings
 config = Config()
 
 
-def write_zarr_local(
+def _write_zarr_local(
         merged_pyramid: datatree.DataTree,
         name: Optional[str] = None,
         store: Optional[str] = None
@@ -103,7 +103,7 @@ def write_zarr_s3(
                     )
 
 
-def write_batch_local_zarr(zarr_store_path: str,
+def _write_batch_local_zarr(zarr_store_path: str,
                            variable_name: str,
                            batch_values: np.ndarray,
                            indexes: list
@@ -213,7 +213,7 @@ def _create_empty_ds(
     return ds
 
 
-def create_empty_zarr_local(
+def _create_empty_zarr_local(
         zarr_name: str,
         coordinate_ranges: Dict[str, List[Union[int, List[int]]]],
         variables: List[str]
