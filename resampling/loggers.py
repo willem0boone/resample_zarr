@@ -61,7 +61,8 @@ class ResourceMonitor:
         can be specified; if not provided, defaults to 'log_resources.log'.
 
         :param log_file: Optional path to the log file. Default is
-        'log_resources.log'.
+            'log_resources.log'.
+
         :type log_file: Optional[str]
         """
         # Configure the logger
@@ -137,13 +138,12 @@ class ResourceMonitor:
     def start_monitor_resources(self, interval: int = 60) -> threading.Thread:
         """
         Start a monitoring thread for counting active threads and monitoring
-        memory usage.
-
-        This method creates and starts a separate thread to continuously
-        monitor and log resource usage based on the specified interval.
+        memory usage.This method creates and starts a separate thread to
+        continuously monitor and log resource usage based on the specified
+        interval.
 
         :param interval: Interval in seconds between each check. Default is 60
-        seconds.
+            seconds.
 
         :type interval: int
         :return: Thread object for the monitoring thread.

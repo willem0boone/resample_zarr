@@ -1,26 +1,7 @@
 resampling package
 ==================
 
-Submodules
-----------
-
-resampling.config module
-------------------------
-
-.. automodule:: resampling.config
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-resampling.define\_windows module
----------------------------------
-
-.. automodule:: resampling.define_windows
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-resampling.down\_scale module
+resampling.down\_scale
 -----------------------------
 
 .. automodule:: resampling.down_scale
@@ -28,7 +9,7 @@ resampling.down\_scale module
    :undoc-members:
    :show-inheritance:
 
-resampling.extract module
+resampling.extract
 -------------------------
 
 .. automodule:: resampling.extract
@@ -36,7 +17,7 @@ resampling.extract module
    :undoc-members:
    :show-inheritance:
 
-resampling.load module
+resampling.load
 ----------------------
 
 .. automodule:: resampling.load
@@ -44,7 +25,7 @@ resampling.load module
    :undoc-members:
    :show-inheritance:
 
-resampling.loggers module
+resampling.loggers
 -------------------------
 
 .. automodule:: resampling.loggers
@@ -52,7 +33,7 @@ resampling.loggers module
    :undoc-members:
    :show-inheritance:
 
-resampling.plot\_logs module
+resampling.plot\_logs
 ----------------------------
 
 .. automodule:: resampling.plot_logs
@@ -60,7 +41,7 @@ resampling.plot\_logs module
    :undoc-members:
    :show-inheritance:
 
-resampling.plot\_zarr module
+resampling.plot\_zarr
 ----------------------------
 
 .. automodule:: resampling.plot_zarr
@@ -68,28 +49,11 @@ resampling.plot\_zarr module
    :undoc-members:
    :show-inheritance:
 
-resampling.transform module
+resampling.transform
 ---------------------------
 
 .. automodule:: resampling.transform
    :members:
    :undoc-members:
    :show-inheritance:
-
-resampling.utils module
------------------------
-
-.. automodule:: resampling.utils
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: resampling
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :noindex:
 

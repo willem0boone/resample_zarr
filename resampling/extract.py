@@ -116,31 +116,38 @@ def extract_private_s3_zarr(
     :type var: Optional[str]
 
     :param lon_range: Longitude range as a tuple of (min_lon, max_lon).
-    Default is None.
+        Default is None.
+
     :type lon_range: Optional[Tuple[float, float]]
 
     :param lat_range: Latitude range as a tuple of (min_lat, max_lat).
-    Default is None.
+        Default is None.
+
     :type lat_range: Optional[Tuple[float, float]]
 
     :param endpoint_url: S3 endpoint URL. If not provided, defaults to the
-    value in the `TOML` configuration file.
+        value in the `TOML` configuration file.
+
     :type endpoint_url: Optional[str]
 
     :param aws_access_key_id: AWS access key ID. If not provided, defaults to
-    the value in the `TOML` configuration file.
+        the value in the `TOML` configuration file.
+
     :type aws_access_key_id: Optional[str]
 
     :param aws_secret_access_key: AWS secret access key. If not provided,
-    defaults to the value in the `TOML` configuration file.
+        defaults to the value in the `TOML` configuration file.
+
     :type aws_secret_access_key: Optional[str]
 
     :param aws_session_token: AWS session token. If not provided, defaults to
-    the value in the `TOML` configuration file.
+        the value in the `TOML` configuration file.
+
     :type aws_session_token: Optional[str]
 
     :param bucket: S3 bucket name. If not provided, defaults to the value in
-    the `TOML` configuration file.
+        the `TOML` configuration file.
+
     :type bucket: Optional[str]
 
     :return: The extracted dataset as an xarray Dataset.
