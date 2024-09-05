@@ -15,49 +15,6 @@ from resampling.extract import extract_private_s3_zarr
 config = Config()
 
 
-def check_s3_zarr_exists(
-        zarr_store_path: str,
-        endpoint_url: Optional[str] = config.settings.endpoint_url,
-        aws_access_key_id: Optional[str] = config.settings.aws_access_key_id,
-        aws_secret_access_key: Optional[str] =
-        config.settings.aws_secret_access_key,
-        aws_session_token: Optional[str] = config.settings.aws_session_token,
-        bucket: Optional[str] = config.settings.bucket,
-) -> bool:
-    """
-    Checks if a Zarr store exists in the specified S3 bucket.
-    """
-    s3 = s3fs.S3FileSystem(
-        key=aws_access_key_id,
-        secret=aws_secret_access_key,
-        token=aws_session_token,
-        client_kwargs={'endpoint_url': endpoint_url}
-    )
-
-    # Check if bucket name is provided
-    if not bucket:
-        raise ValueError("Bucket name must be provided.")
-
-    # Construct the full path to the Zarr store
-    full_path = f"{bucket}/{zarr_store_path}"
-
-    # Check if the path exists
-    try:
-        # Using the `ls` method to check if directory exists
-        if s3.exists(full_path):
-            # Check if it's a directory (Zarr store)
-            if s3.isdir(full_path):
-                return True
-            else:
-                print(f"The path '{full_path}' exists but is not a directory.")
-                return False
-        else:
-            return False
-    except Exception as e:
-        print(f"Error checking S3 path: {e}")
-        return False
-
-
 def _write_zarr_local(
         merged_pyramid: datatree.DataTree,
         name: Optional[str] = None,
