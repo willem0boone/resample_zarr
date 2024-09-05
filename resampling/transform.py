@@ -6,8 +6,8 @@ from typing import Union
 from ndpyramid import pyramid_reproject
 from carbonplan_data.metadata import get_cf_global_attrs
 
-from resampling.utils import set_zarr_encoding
-from resampling.utils import compute_grid_area
+from resampling._utils import set_zarr_encoding
+from resampling._utils import compute_grid_area
 
 
 def combine_datasets(datasets):

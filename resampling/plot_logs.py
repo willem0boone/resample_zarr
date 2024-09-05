@@ -8,12 +8,6 @@ import matplotlib.dates as mdates
 
 def _parse_resource_log(logfile: Optional[str] = 'log_resources.log'
                         ) -> pd.DataFrame:
-    """
-    Parses the log file to extract active threads and memory usage and plots
-    them.
-
-    :param logfile: Path to the log file.
-    """
     timestamps = []
     active_threads = []
     memory_usage = []
@@ -47,12 +41,7 @@ def _parse_resource_log(logfile: Optional[str] = 'log_resources.log'
 
 def _parse_event_log(logfile: Optional[str] = 'log_events.log'
                      ) -> pd.DataFrame:
-    """
-    Parses the log file to extract timestamps and downscaling dataset names.
 
-    :param logfile: Path to the log file.
-    :return: DataFrame containing the timestamps and dataset names.
-    """
     timestamps = []
     datasets = []
     vars = []
@@ -106,8 +95,26 @@ def _parse_event_log(logfile: Optional[str] = 'log_events.log'
     return df
 
 
-def plot_resource_log(logfile: Optional[str] = 'log_resources.log') -> None:
+def plot_resource_log(
+        logfile: Optional[str] = 'log_resources.log'
+) -> None:
+    """
+    Plots resource usage metrics from a log file, showing memory usage and
+    active threads over time.
 
+    This function reads resource log data from a specified file and generates
+    a plot with two y-axes: one for memory usage and another for active
+    threads. The x-axis represents timestamps.
+
+    :param logfile: Path to the resource log file. Default is
+    'log_resources.log'.
+    :type logfile: Optional[str]
+
+    :return: None
+    :rtype: None
+
+    :raises ValueError: If the DataFrame does not contain a 'timestamp' column.
+    """
     df = _parse_resource_log(logfile)
 
     # Ensure 'timestamp' column is in datetime format
@@ -120,18 +127,11 @@ def plot_resource_log(logfile: Optional[str] = 'log_resources.log') -> None:
     # Plot memory usage on the primary y-axis
     ax1.set_xlabel('Timestamp')
     ax1.set_ylabel('Memory Usage (GB)', color='tab:blue')
-
-    ax1.plot_logs(
-        df['timestamp'],
-        df['memory_usage'],
-        color='tab:blue',
-        label='Memory Usage'
-    )
-
-    ax1.tick_params(
-        axis='y',
-        labelcolor='tab:blue'
-    )
+    ax1.plot(df['timestamp'],
+             df['memory_usage'],
+             color='tab:blue',
+             label='Memory Usage')
+    ax1.tick_params(axis='y', labelcolor='tab:blue')
 
     # Format the x-axis with readable date and time labels
     ax1.xaxis.set_major_locator(mdates.AutoDateLocator())
@@ -140,44 +140,54 @@ def plot_resource_log(logfile: Optional[str] = 'log_resources.log') -> None:
 
     # Create a second y-axis for active threads
     ax2 = ax1.twinx()
-    ax2.set_ylabel(
-        'Active Threads',
-        color='tab:red',
-    )
-
-    ax2.plot_logs(
-        df['timestamp'],
-        df['active_threads'],
-        color='tab:red',
-        label='Active Threads',
-        linestyle='--'
-    )
-
-    ax2.tick_params(
-        axis='y',
-        labelcolor='tab:red'
-    )
+    ax2.set_ylabel('Active Threads', color='tab:red')
+    ax2.plot(df['timestamp'],
+             df['active_threads'],
+             color='tab:red',
+             linestyle='--',
+             label='Active Threads')
+    ax2.tick_params(axis='y', labelcolor='tab:red')
 
     # Title and grid
     plt.title('Memory Usage and Active Threads Over Time')
     fig.tight_layout()  # Adjust layout to fit labels
     plt.grid(True)
-    # plt.show()
+
+    # Save the plot to a file
     plt.savefig("monitor_resources.png")
     plt.close()
 
 
-def plot_event_log(logfile: Optional[str] = 'log_events.log') -> None:
+def plot_event_log(
+        logfile: Optional[str] = 'log_events.log'
+) -> None:
+    """
+    Plots events from a log file, showing vertical lines for each event.
+
+    This function reads event log data from a specified file and generates
+    a plot with vertical lines marking the timestamps of events. The event
+    names are annotated along the lines.
+
+    :param logfile: Path to the event log file. Default is 'log_events.log'.
+    :type logfile: Optional[str]
+
+    :return: None
+    :rtype: None
+
+    :raises ValueError: If the DataFrame does not contain 'timestamp' and 'var'
+     columns.
+    """
     df = _parse_event_log(logfile)
+
     # Ensure the DataFrame has the necessary columns
     if 'timestamp' not in df or 'var' not in df:
-        raise ValueError(
-            "DataFrame must contain 'timestamp' and 'var' columns.")
+        raise ValueError("DataFrame must contain 'timestamp' and 'var' "
+                         "columns.")
 
     # Filter the DataFrame to only include rows with VAR values
     var_df = df[df['var'].notna()]
 
-    # Set up the plot_logs
+    # Set up the plot
     fig, ax1 = plt.subplots(figsize=(12, 6))
 
     # Plot vertical lines for each VAR
@@ -189,7 +199,7 @@ def plot_event_log(logfile: Optional[str] = 'log_events.log') -> None:
                  verticalalignment='center',
                  horizontalalignment='left', color='black', fontsize=8)
 
-    # Formatting the plot_logs
+    # Formatting the plot
     ax1.set_xlabel('Timestamp')
     ax1.set_ylabel('VAR Names', color='r')
     ax1.tick_params(axis='y', labelcolor='r')
@@ -204,23 +214,45 @@ def plot_event_log(logfile: Optional[str] = 'log_events.log') -> None:
     ax2.set_ylabel('Dataset', color='b')
 
     # Optionally, you can add dataset information on the secondary y-axis
-    # Here we're just adding an empty plot_logs for demonstration
-    ax2.plot_logs(df['timestamp'], [1] * len(df), color='b', linestyle='none',
-                  marker='o')  # Dummy data
+    # Here we're just adding an empty plot for demonstration
+    ax2.plot(df['timestamp'], [1] * len(df), color='b', linestyle='none',
+             marker='o')  # Dummy data
     ax2.tick_params(axis='y', labelcolor='b')
 
     plt.title('VAR Timestamps with Vertical Lines')
     plt.grid(True)
     plt.tight_layout()
 
-    plt.savefig(f"monitor_events.png")
+    plt.savefig("monitor_events.png")
     plt.close()
 
 
-def plot_logs(resource_log: Optional[str] = 'log_resources.log',
-              event_log: Optional[str] = 'log_events.log',
-              show: Optional[bool] = False
-              ) -> None:
+def plot_logs(
+        resource_log: Optional[str] = 'log_resources.log',
+        event_log: Optional[str] = 'log_events.log',
+        show: Optional[bool] = False
+) -> None:
+    """
+    Plots resource usage and event data from log files.
+
+    This function reads resource and event logs from specified files and
+    generates a plot that shows memory usage and active threads over time,
+    as well as event markers for variable (VAR) events.
+
+    :param resource_log: Path to the resource log file. Default is
+    'log_resources.log'.
+    :type resource_log: Optional[str]
+
+    :param event_log: Path to the event log file. Default is 'log_events.log'.
+    :type event_log: Optional[str]
+
+    :param show: If True, display the plot. If False, save the plot to a file.
+        Default is False.
+    :type show: Optional[bool]
+
+    :return: None
+    :rtype: None
+    """
     df_resources = _parse_resource_log(resource_log)
     df_events = _parse_event_log(event_log)
 
@@ -282,11 +314,4 @@ def plot_logs(resource_log: Optional[str] = 'log_resources.log',
         plt.show()
     else:
         plt.close()
-
-
-if __name__ == "__main__":
-    plot_resource_log()
-    plot_event_log()
-    plot_logs()
-
 

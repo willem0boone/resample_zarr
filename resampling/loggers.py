@@ -11,9 +11,24 @@ from typing import Optional
 
 def setup_logger(log_file: Optional[str] = "log_events.log") -> logging.Logger:
     """
-    Sets up a logger for monitoring with a file handler.
+    Set up a logger with a file handler for monitoring events.
 
-    :param log_file: Path to the log file where logs will be written.
+    This function creates and configures a logger that writes log messages
+    to a specified file. The logger's level is set to INFO, and a formatter
+    is applied to ensure that log messages include timestamps.
+
+    :param log_file: The path to the log file where logs will be written.
+        If not provided, defaults to "log_events.log".
+    :type log_file: Optional[str]
+
+    :return: A configured `logging.Logger` instance.
+    :rtype: logging.Logger
+
+    :raises ValueError: If the log file path is invalid or cannot be created.
+
+    .. note::
+        If the logger already has handlers, they will be cleared before
+        adding the new file handler. Ensure that the log file path is writable.
     """
     # Create a logger instance
     logger = logging.getLogger('EventLogger')
@@ -39,11 +54,17 @@ def setup_logger(log_file: Optional[str] = "log_events.log") -> logging.Logger:
 class ResourceMonitor:
     def __init__(self, log_file: Optional[str] = 'log_resources.log'):
         """
-        Initialize the ThreadMonitor class with a logging configuration.
+        Initialize the ResourceMonitor with logging configuration.
 
-        :param log_file: Optional log file name. Default is 'default_log.log'.
+        This class sets up a logger to track resource usage, including active
+        threads and memory usage. The log file where logs will be written
+        can be specified; if not provided, defaults to 'log_resources.log'.
+
+        :param log_file: Optional path to the log file. Default is
+        'log_resources.log'.
+        :type log_file: Optional[str]
         """
-        # Configure the _logger
+        # Configure the logger
         self._logger = logging.getLogger('MonitorLogger')
         self._logger.setLevel(logging.INFO)
 
@@ -51,20 +72,26 @@ class ResourceMonitor:
         if self._logger.hasHandlers():
             self._logger.handlers.clear()
 
+        # Create and configure file handler
         thread_monitor_handler = logging.FileHandler(log_file)
-        thread_monitor_formatter = logging.Formatter(
-            '%(asctime)s - %(message)s')
+        thread_monitor_formatter = (
+            logging.Formatter('%(asctime)s - %(message)s'))
         thread_monitor_handler.setFormatter(thread_monitor_formatter)
         self._logger.addHandler(thread_monitor_handler)
 
-        self._logger.info(f"Starting new run")
+        self._logger.info("Starting new run")
 
     def _log_function(self, func: Callable) -> Callable:
         """
         Decorator to log the execution time and errors of a function.
 
-        :param func: Function to be decorated.
-        :return: Wrapped function with logging.
+        This method wraps a function to log its start and end times, as well
+        as any errors encountered during execution.
+
+        :param func: The function to be decorated.
+        :type func: Callable
+        :return: The wrapped function with logging.
+        :rtype: Callable
         """
         @functools.wraps(func)
         def wrapper(*args, **kwargs) -> Any:
@@ -84,14 +111,20 @@ class ResourceMonitor:
         Continuously monitors and logs the number of active threads and memory
         usage.
 
-        :param interval: Interval in seconds between each check. Default is 60.
+        This method runs in a loop, checking the number of active threads and
+        the memory usage of the current process at regular intervals. The
+        interval between checks is specified by the `interval` parameter.
+
+        :param interval: Interval in seconds between each check. Default is 60
+        seconds.
+        :type interval: int
         :return: None
+        :rtype: None
         """
         while True:
             active_threads = threading.active_count()
             memory_info = psutil.Process().memory_info()
-            # Convert to GB
-            memory_usage = memory_info.rss / (1024 * 1024 * 1024)
+            memory_usage = memory_info.rss / (1024 * 1024 * 1024)  # Convert to GB
             cpu = multiprocessing.cpu_count()
 
             self._logger.info(
@@ -106,8 +139,15 @@ class ResourceMonitor:
         Start a monitoring thread for counting active threads and monitoring
         memory usage.
 
-        :param interval: Interval in seconds between each check. Default is 60.
+        This method creates and starts a separate thread to continuously
+        monitor and log resource usage based on the specified interval.
+
+        :param interval: Interval in seconds between each check. Default is 60
+        seconds.
+
+        :type interval: int
         :return: Thread object for the monitoring thread.
+        :rtype: threading.Thread
         """
         monitor_thread = threading.Thread(
             target=lambda: self._count_resources(interval=interval),
@@ -115,3 +155,4 @@ class ResourceMonitor:
         )
         monitor_thread.start()
         return monitor_thread
+

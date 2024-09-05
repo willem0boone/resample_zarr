@@ -31,7 +31,7 @@ def compute_grid_area(da):
 
 
 # -----------------------------------------------------------------------------
-# The function "set_zarr_encoding" is part of carbonplan_data\utils.py. This
+# The function "set_zarr_encoding" is part of carbonplan_data\_utils.py. This
 # module uses urlpath package which imports '_PosixFlavour' from 'pathlib' and
 # results in import error. The function is moved to here to avoid the
 # import error.

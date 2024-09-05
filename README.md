@@ -17,12 +17,15 @@ In this demonstrator, habitat suitability is calculated using a deterministic mo
 - Sea surface salinity ()
 - Bathymetry (depth in m) 
 
-The thresholds for all variables can be adopted using slider widgets. On any changing parameter, the suitability map is updated and rendered in the viewer. Using a time slider, environmental parameters for several future climate scenarios can be accessed and converted in suitability maps. 
+The thresholds for all variables can be adopted using slider widgets. On any changing parameter, the suitability map is updated and rendered in the viewer. Using a time slider, environmental parameters for several future climate scenarios can be accessed and converted in suitability maps.
+This work is available on this [GitHub page](https://github.com/willem0boone/Edito_model_viewer). 
 
 #### Data formatting
 The environmental variable dataset used by the smartviewer, need to be provided in a specific format. To create this dataset, different sources and storage from Edito data lake are used. Two pipelines were required: 
 - Downscaling large .zarr datasets to lower resolution. E.g. the bathymetry dataset is around 20GB, which is to large for the demonstrator purpose.
 - Creating pyramids in which each level has increasing resolution (for optimal zooming/rendering).
+
+This work is available on this [GitHub page](https://github.com/willem0boone/Edito_resampling_datasets)
 
 ## How to use
 - resampling: package, pip install & documentation will follow. 
