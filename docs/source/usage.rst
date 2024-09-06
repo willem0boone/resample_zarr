@@ -1,13 +1,6 @@
 Usage
 =====
 
-.. _installation:
-
-Installation
-------------
-
-To be developed.
-
 Resampling ZARR datasets
 ------------------------
 
@@ -30,7 +23,7 @@ Import standard packages
 Import Resampling modules
 """""""""""""""""""""""""
 
-Before running this code, make sure your S3 credentials are stored in the config.toml. 
+Before running this code, make sure your S3 credentials are stored in the config.toml.
 
 .. code-block:: python
 

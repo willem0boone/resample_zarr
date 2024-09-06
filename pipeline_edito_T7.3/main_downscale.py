@@ -17,13 +17,13 @@ if __name__ == "__main__":
     # Resampling specifications
     resampler = [
         {"dimension": "latitude",
-         "range": (30, 60),
-         "step": 1,
+         "range": (30, 70),
+         "step": 0.1,
          "invert": True
          },
         {"dimension": "longitude",
-         "range": (-10, 10),
-         "step": 1
+         "range": (-20, 50),
+         "step": 0.1
          },
     ]
 
@@ -42,7 +42,7 @@ if __name__ == "__main__":
 
         my_store.write_zarr(
             dataset=ds_downscaled,
-            name=f"tst_{item.dataset}.zarr"
+            name=f"EDITO_DUC_{item.dataset}.zarr"
         )
 
     # -------------------------------------------------------------------------
@@ -52,7 +52,7 @@ if __name__ == "__main__":
     url = ("https://s3.waw3-1.cloudferro.com/emodnet/bathymetry/bathymetry_"
            "2022.zarr")
     var = ["elevation"]
-    dest_zarr = "tst_bathymetry.zarr"
+    dest_zarr = "EDITO_DUC_bathymetry.zarr"
     ds = xr.open_zarr(url)
 
     params = {"resampler": resampler,
@@ -67,30 +67,30 @@ if __name__ == "__main__":
         **params)
 
     # -------------------------------------------------------------------------
-    print("start plotting")
-    # verify datasets by plotting them
-    if not os.path.isdir("plots"):
-        os.makedirs("plots")
-
-    for item in datasets.itertuples():
-        print(item)
-        my_s3_ds = my_store.extract_zarr(
-            name=f"tst_{item.dataset}.zarr")
-
-        for time_index in range(len(my_s3_ds.time)):
-            data_slice = my_s3_ds.isel(time=time_index)
-            time_value = my_s3_ds.time.values[time_index]
-            time_value = pd.Timestamp(time_value).year
-            plot_dataset(data_slice,
-                      var=item.var,
-                      name=f"plots/{item.var}_{time_value}.png")
-
-    # plot bathymetry
-    my_s3_ds = my_store.extract_zarr(name=f"tst_bathymetry.zarr")
-    plot_dataset(my_s3_ds,
-                 var="elevation",
-                 name=f"plots/elevation.png")
-
-    # -------------------------------------------------------------------------
-    # plot_logs logs
-    plot_logs()
+    # print("start plotting")
+    # # verify datasets by plotting them
+    # if not os.path.isdir("plots"):
+    #     os.makedirs("plots")
+    #
+    # for item in datasets.itertuples():
+    #     print(item)
+    #     my_s3_ds = my_store.extract_zarr(
+    #         name=f"EDITO_DUC_{item.dataset}.zarr")
+    #
+    #     for time_index in range(len(my_s3_ds.time)):
+    #         data_slice = my_s3_ds.isel(time=time_index)
+    #         time_value = my_s3_ds.time.values[time_index]
+    #         time_value = pd.Timestamp(time_value).year
+    #         plot_dataset(data_slice,
+    #                   var=item.var,
+    #                   name=f"plots/{item.var}_{time_value}.png")
+    #
+    # # plot bathymetry
+    # my_s3_ds = my_store.extract_zarr(name=f"EDITO_DUC_bathymetry.zarr")
+    # plot_dataset(my_s3_ds,
+    #              var="elevation",
+    #              name=f"plots/elevation.png")
+    #
+    # # -------------------------------------------------------------------------
+    # # plot_logs logs
+    # plot_logs()

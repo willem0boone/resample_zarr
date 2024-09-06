@@ -27,18 +27,18 @@ def down_scale_on_the_fly(
     Downscale an `xarray.Dataset` by resampling its dimensions based on specified parameters.
 
     This function performs downscaling on-the-fly by:
-    - Creating new coordinates for each dimension to match the specified step sizes.
-    - Slicing and interpolating the dataset based on these new coordinates.
+    * Creating new coordinates for each dimension to match the specified step sizes.
+    * Slicing and interpolating the dataset based on these new coordinates.
 
     :param ds: The `xarray.Dataset` to downscale.
     :type ds: xarray.Dataset
     :param resampler: A list of dictionaries specifying the resampling parameters for each dimension.
         Each dictionary must include:
-        - **dimension** (str): The name of the dimension to resample.
-        - **step** (float): The step size for the resampling.
-        - **range** (Tuple[float, float]): The range of values for the dimension as (start, end).
-        - **invert** (bool, optional): Whether to invert the dimension coordinates. Defaults to False.
-    :type resampler: list of dicts
+        * **dimension** (str): The name of the dimension to resample.
+        * **step** (float): The step size for the resampling.
+        * **range** (Tuple[float, float]): The range of values for the dimension as (start, end).
+        * **invert** (bool, optional): Whether to invert the dimension coordinates. Defaults to False.
+    :type resampler: List[Dict[str, Union[str, float, Tuple[float, float], bool]]]
     :return: A downscaled `xarray.Dataset` with interpolated values on new coordinates.
     :rtype: xarray.Dataset
     :raises ValueError: If generated coordinates for a dimension are empty due to invalid range or step values.
@@ -117,10 +117,12 @@ def down_scale_in_batches(
         will be saved.
     :type dest_zarr: str
 
-    :param resampler:
-        A list of dictionaries specifying the resampling strategies for different
-        variables or dimensions. Each dictionary can contain keys such as method,
-        scale factors, or other relevant settings.
+    :param resampler: A list of dictionaries specifying the resampling parameters for each dimension.
+        Each dictionary must include:
+        * **dimension** (str): The name of the dimension to resample.
+        * **step** (float): The step size for the resampling.
+        * **range** (Tuple[float, float]): The range of values for the dimension as (start, end).
+        * **invert** (bool, optional): Whether to invert the dimension coordinates. Defaults to False.
     :type resampler: List[Dict[str, Union[str, float, Tuple[float, float], bool]]]
 
     :param variables:
