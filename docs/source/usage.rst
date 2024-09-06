@@ -88,6 +88,7 @@ event_logger will return an initiation of logging.Logger to be used for logging 
 ^^^^^^^^^^^^^^^^^^^^^^
 
 If a dataset is manageable to be read in momory without consuming to much RAM, it can be resampled in on the fly.
+
 Define target dataset
 """""""""""""""""""""
 
@@ -129,6 +130,7 @@ Resample using batches
 ^^^^^^^^^^^^^^^^^^^^^^
 
 When reading datasets that consume more RAM then you have available, it is not feasible to process them in memory. Instead, the dataset will be devided in batches (each containing #x windows) and each window will be processed seperate.
+
 Define target dataset
 """"""""""""""""""""""
 
@@ -145,11 +147,13 @@ Open the dataset with xarray, notice that this ds consumes 66GB.
     ds = xr.open_zarr(url)
     print(ds)
 
-Additional settings to regulate the window processing:
-- workers: number of windows that will be processed in parallel. Each window will start a thread. Notice that the total number of thread will be larger than number of workers due to a number of background threads (especially since zarr is using Dask which will also open several threads).
-- batch_size: number of windows to be processed before writing the results to the zarr. Small batch size will slow down the process because of the increasing amount of write operations. Large batch sizes could cause RAM errors.
 Batch processing settings
 ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Additional settings to regulate the window processing:
+
+* workers: number of windows that will be processed in parallel. Each window will start a thread. Notice that the total number of thread will be larger than number of workers due to a number of background threads (especially since zarr is using Dask which will also open several threads).
+* batch_size: number of windows to be processed before writing the results to the zarr. Small batch size will slow down the process because of the increasing amount of write operations. Large batch sizes could cause RAM errors.
 
 .. code-block:: python
 
