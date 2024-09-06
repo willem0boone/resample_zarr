@@ -141,7 +141,7 @@ class ObjectStore:
 
         return ds
 
-    def check_s3_zarr_exists(self, zarr_store_path: str) -> bool:
+    def check_zarr_exists(self, zarr_store_path: str) -> bool:
         """
         Checks if a Zarr store exists in the specified S3 path.
 
@@ -204,7 +204,7 @@ class ObjectStore:
 
         dataset.to_zarr(store=store, consolidated=True, mode=mode)
 
-    def write_batch_s3_zarr(
+    def write_zarr_batch(
             self,
             zarr_store_path: str,
             variable_name: str,
@@ -328,7 +328,7 @@ class ObjectStore:
         self.write_zarr(ds, zarr_name)
         return ds
 
-    def delete_s3_zarr(self, zarr_store_path: str) -> None:
+    def delete_zarr(self, zarr_store_path: str) -> None:
         """
         Deletes a Zarr store from the specified S3 path.
 

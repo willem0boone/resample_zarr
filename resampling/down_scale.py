@@ -106,12 +106,12 @@ def down_scale_in_batches(
     windows, indices, dimensions = define_windows(resampler, ds)
 
     # Check if the target Zarr store exists
-    exists = my_store.check_s3_zarr_exists(dest_zarr)
+    exists = my_store.check_zarr_exists(dest_zarr)
     if exists:
         if logger:
             logger.info(f"{dest_zarr} already exists, it will be deleted and"
                         f" a new empyt zarr will be created")
-        my_store.delete_s3_zarr(dest_zarr)
+        my_store.delete_zarr(dest_zarr)
 
     my_store.create_empty_zarr(zarr_name=dest_zarr,
                                coordinate_ranges=dimensions,
@@ -139,7 +139,7 @@ def down_scale_in_batches(
                                         )
 
             # Write the batch to the Zarr store
-            my_store.write_batch_s3_zarr(
+            my_store.write_zarr_batch(
                 zarr_store_path=dest_zarr,
                 variable_name=variable,
                 batch_values=means,

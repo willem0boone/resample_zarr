@@ -5,9 +5,9 @@ from pprint import pprint
 
 def get_my_store():
     """
-    A function that will read credentials from the config/config.toml file and
-    create a ObjectStore instance based on this information. Use this if you
-    want to autoconfigure your store management.
+    A function that initiates an ObjectStore instance based on credentials
+    stored the config/config.toml. Use this to autoconfigure your store
+    management without exposing your credentials in any scrips.
 
     :return: ObjectStore instance based on credentials saved in
         config/config.toml
