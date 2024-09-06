@@ -34,10 +34,10 @@ def down_scale_on_the_fly(
     :type ds: xarray.Dataset
     :param resampler: A list of dictionaries specifying the resampling parameters for each dimension.
         Each dictionary must include:
-            * **dimension** (str): The name of the dimension to resample.
-            * **step** (float): The step size for the resampling.
-            * **range** (Tuple[float, float]): The range of values for the dimension as (start, end).
-            * **invert** (bool, optional): Whether to invert the dimension coordinates. Defaults to False.
+        * **dimension** (str): The name of the dimension to resample.
+        * **step** (float): The step size for the resampling.
+        * **range** (Tuple[float, float]): The range of values for the dimension as (start, end).
+        * **invert** (bool, optional): Whether to invert the dimension coordinates. Defaults to False.
     :type resampler: List[Dict[str, Union[str, float, Tuple[float, float], bool]]]
     :return: A downscaled `xarray.Dataset` with interpolated values on new coordinates.
     :rtype: xarray.Dataset
@@ -119,10 +119,10 @@ def down_scale_in_batches(
 
     :param resampler: A list of dictionaries specifying the resampling parameters for each dimension.
         Each dictionary must include:
-            * **dimension** (str): The name of the dimension to resample.
-            * **step** (float): The step size for the resampling.
-            * **range** (Tuple[float, float]): The range of values for the dimension as (start, end).
-            * **invert** (bool, optional): Whether to invert the dimension coordinates. Defaults to False.
+        * dimension (str): The name of the dimension to resample.
+        * step (float): The step size for the resampling.
+        * range (Tuple[float, float]): The range of values for the dimension as (start, end).
+        * invert (bool, optional): Whether to invert the dimension coordinates. Defaults to False.
     :type resampler: List[Dict[str, Union[str, float, Tuple[float, float], bool]]]
 
     :param variables:
