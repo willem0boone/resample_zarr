@@ -34,16 +34,25 @@ Before running this code, make sure your S3 credentials are stored in the config
 
 .. code-block:: python
 
-    parent_dir = Path().resolve().parent
-    sys.path.append(str(parent_dir))
-    from resampling import load
-    from resampling import extract
-    from resampling import down_scale
-    from resampling import loggers
-    from resampling import plot_logs
+    from resampling.plot_logs import plot_logs
+    from resampling.my_store import get_my_store
+    from resampling.plot_zarr import plot_dataset
+    from resampling.down_scale import down_scale_in_batches
+    from resampling.down_scale import down_scale_on_the_fly
 
 2. Settings
 ^^^^^^^^^^^
+
+Initiate ObjectStore
+""""""""""""""""""""
+
+Using get_my_store.get_my_store, we can initiate an instance of ObjectStore. The ObjectStore class will handle all IO to our S3 storage. ObjectStore can be initiated directly providing credentials, or get_my_store can be used, which imports the credentials from config/config.toml.
+**Notice not to expose your credentials!**
+The credentials used and displayed in this tutorial are only valid for 24h and thus cause no security leak.
+
+.. code-block:: python
+
+    my_store = get_my_store()
 
 Target resolution
 """""""""""""""""
@@ -65,24 +74,6 @@ Note that dimensions that are in the dataset but that are not mentioned in resam
          },
     ]
 
-Initiate loggers for monitoring
-"""""""""""""""""""""""""""""""
-
-resource_logger: logs every 60 seconds the resources
-* number of threads
-* RAM
-* CPU
-
-.. code-block:: python
-
-    resource_monitor = loggers.ResourceMonitor()
-    resource_monitor.start_monitor_resources()
-
-event_logger will return an initiation of logging.Logger to be used for logging events later on.
-
-.. code-block:: python
-
-    event_logger = loggers.setup_logger()
 
 3. Resample on the fly
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -111,7 +102,7 @@ Rescale the xarray dataset according the information from the resampler.
 
 .. code-block:: python
 
-    ds_downscaled = down_scale.down_scale_on_the_fly(
+    ds_downscaled = down_scale_on_the_fly(
         ds=ds,
         resampler=resampler
     )
@@ -119,6 +110,8 @@ Rescale the xarray dataset according the information from the resampler.
 .. code-block:: python
 
     print(ds_downscaled)
+
+Save the result to a new zarr.
 
 .. code-block:: python
 
@@ -171,15 +164,17 @@ You can track progress in the log_events.log. It keeps track of the number of ba
 .. code-block:: python
 
     dest_zarr = "tutorial_resampled_bathymetry.zarr"
-    down_scale.down_scale_in_batches(ds=ds,
-                                     dest_zarr=dest_zarr,
-                                     variables=var,
-                                     logger=event_logger,
-                                     **params)
+    down_scale_in_batches(
+        my_store=my_store,
+        ds=ds,
+        dest_zarr=dest_zarr,
+        variables=var,
+        **params)
 
 Inspect logs
 ^^^^^^^^^^^^
 
+down_scale_in_batches is a function that might take some time. In order to monitor progress, tt will log several parameters.
 In case your program crashes, you can plot the logs and inspect resource consumption in order to provide better settings for a retry.
 
 .. code-block:: python

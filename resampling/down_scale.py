@@ -96,19 +96,77 @@ def down_scale_in_batches(
     workers: int,
     logs: Optional[bool] = True
 ) -> None:
+    """
+    Downscale the dataset in batches and store the results in a Zarr format.
 
-    resource_monitor = ResourceMonitor()
-    resource_monitor.start_monitor_resources()
-    logger = setup_logger()
+    This function processes a large dataset by splitting it into smaller windows,
+    downscaling each window, and then storing the downscaled data in a Zarr store
+    in batches. It utilizes threading to process the windows concurrently.
 
-    logger.info(f"Downscaling to dataset: {dest_zarr}")
+    :param ds:
+        The input xarray dataset to be downscaled.
+    :type ds: xr.Dataset
+
+    :param my_store:
+        An instance of ObjectStore which handles interactions with Zarr stores,
+        such as checking existence, deleting, creating, and writing to the Zarr store.
+    :type my_store: ObjectStore
+
+    :param dest_zarr:
+        The path or identifier of the destination Zarr store where the downscaled data
+        will be saved.
+    :type dest_zarr: str
+
+    :param resampler:
+        A list of dictionaries specifying the resampling strategies for different
+        variables or dimensions. Each dictionary can contain keys such as method,
+        scale factors, or other relevant settings.
+    :type resampler: List[Dict[str, Union[str, float, Tuple[float, float], bool]]]
+
+    :param variables:
+        A list of variable names to be processed and downscaled.
+    :type variables: List[str]
+
+    :param batch_size:
+        The number of windows to process in a single batch.
+    :type batch_size: int
+
+    :param workers:
+        The number of worker threads to use for parallel processing.
+    :type workers: int
+
+    :param logs:
+        Whether to log progress messages. Defaults to True.
+    :type logs: Optional[bool]
+
+    :return:
+        None
+    :rtype: None
+
+    This function performs the following steps:
+
+    1. It starts resource monitoring and sets up logging.
+    2. It calculates the necessary windows and indices for processing the dataset.
+    3. It checks if the target Zarr store exists. If it does, the store is deleted and recreated.
+    4. It iteratively processes each variable by:
+       - Splitting the dataset into windows of data.
+       - Downscaling the data within each window using multithreading.
+       - Writing the downscaled data to the Zarr store in batches.
+    5. Logs the progress and completion of each batch and variable.
+    """
+    if logs:
+        resource_monitor = ResourceMonitor()
+        resource_monitor.start_monitor_resources()
+        logger = setup_logger()
+
+        logger.info(f"Downscaling to dataset: {dest_zarr}")
 
     windows, indices, dimensions = define_windows(resampler, ds)
 
     # Check if the target Zarr store exists
     exists = my_store.check_zarr_exists(dest_zarr)
     if exists:
-        if logger:
+        if logs:
             logger.info(f"{dest_zarr} already exists, it will be deleted and"
                         f" a new empyt zarr will be created")
         my_store.delete_zarr(dest_zarr)
@@ -123,7 +181,7 @@ def down_scale_in_batches(
 
             batch_i = int(i / batch_size)
             batch_n = int(np.ceil(total_windows / batch_size))
-            if logger:
+            if logs:
                 logger.info(f">> Working on VAR {variable} - "
                             f"batch {batch_i + 1}/{batch_n}:"
                             f"windows [{i}-{i + batch_size}]/{total_windows}")
@@ -144,7 +202,7 @@ def down_scale_in_batches(
                 variable_name=variable,
                 batch_values=means,
                 indexes=batch_of_indices)
-        if logger:
+        if logs:
             logger.info(f">> Finished VAR {variable}")
 
 

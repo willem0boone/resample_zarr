@@ -16,3 +16,13 @@
 2024-09-03 15:02:37,691 - >> Working on VAR elevation - batch 15/16:windows [7000-7500]/8000
 2024-09-03 15:02:58,092 - >> Working on VAR elevation - batch 16/16:windows [7500-8000]/8000
 2024-09-03 15:03:05,923 - >> Finished VAR elevation
+2024-09-06 14:27:09,326 - Downscaling to dataset: tutorial_resampled_bathymetry.zarr
+2024-09-06 14:27:09,551 - tutorial_resampled_bathymetry.zarr already exists, it will be deleted and a new empyt zarr will be created
+2024-09-06 14:29:16,983 - Downscaling to dataset: tutorial_resampled_bathymetry.zarr
+2024-09-06 14:29:16,994 - tutorial_resampled_bathymetry.zarr already exists, it will be deleted and a new empyt zarr will be created
+2024-09-06 14:29:51,958 - Downscaling to dataset: tutorial_resampled_bathymetry.zarr
+2024-09-06 14:29:52,048 - tutorial_resampled_bathymetry.zarr already exists, it will be deleted and a new empyt zarr will be created
+2024-09-06 14:30:01,332 - Downscaling to dataset: tutorial_resampled_bathymetry.zarr
+2024-09-06 14:30:01,342 - tutorial_resampled_bathymetry.zarr already exists, it will be deleted and a new empyt zarr will be created
+2024-09-06 14:30:03,851 - Downscaling to dataset: tutorial_resampled_bathymetry.zarr
+2024-09-06 14:30:03,861 - tutorial_resampled_bathymetry.zarr already exists, it will be deleted and a new empyt zarr will be created

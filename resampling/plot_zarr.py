@@ -85,6 +85,9 @@ def plot_dataset(
     :raises KeyError: If the variable `var` is not found in the Dataset.
     :raises ValueError: If the Dataset does not contain the variable data.
     """
+    if not name.endswith('.png'):
+        name = f"{name}.png"
+
     # Check if the variable exists in the Dataset
     if var not in ds:
         raise KeyError(f"Variable '{var}' not found in the Dataset.")
@@ -106,5 +109,5 @@ def plot_dataset(
     ax.set_title(name)
 
     # Save the plot as a PNG file
-    plt.savefig(f"{name}.png")
+    plt.savefig(f"{name}")
     plt.close()

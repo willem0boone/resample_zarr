@@ -33,6 +33,6 @@ def get_my_store():
     return my_store
 
 
-x = get_my_store()
+
 
 
