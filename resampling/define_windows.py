@@ -160,15 +160,12 @@ def define_windows(
     resampler configuration, and includes any dimensions present in the dataset
     but not specified in the resampler.
 
-    :param resampler: A list of dictionaries where each dictionary specifies;
-        dimension (str): The name of the dimension.
-        range (Union[int, Tuple[Union[int, float], Union[int, float]]]): The
-        range of the dimension. It can be a single value or a tuple indicating
-        the start and stop values.
-        step (Optional[Union[int, float]]): The step size for creating
-        intervals. Defaults to 1 if not provided.
-        invert (Optional[bool]): If True, the intervals for this dimension are
-        reversed. Defaults to False.
+    :param resampler: A list of dictionaries specifying the resampling parameters for each dimension.
+        Each dictionary must include:
+            * **dimension** (str): The name of the dimension to resample.
+            * **step** (float): The step size for the resampling.
+            * **range** (Tuple[float, float]): The range of values for the dimension as (start, end).
+            * **invert** (bool, optional): Whether to invert the dimension coordinates. Defaults to False.
 
     :type resampler: List[Dict[str, Any]]
 
