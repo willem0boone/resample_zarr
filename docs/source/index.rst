@@ -24,6 +24,7 @@ Contents
 .. toctree::
    :maxdepth: 1
    :titlesonly:
+
    installation
    usage
    API
