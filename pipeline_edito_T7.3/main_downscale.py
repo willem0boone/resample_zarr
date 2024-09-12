@@ -28,22 +28,22 @@ if __name__ == "__main__":
     ]
 
     # -------------------------------------------------------------------------
-    # downscale datasets on the fly
-    datasets = pd.read_csv("datasets.csv")
-
-    for i, item in enumerate(datasets.itertuples()):
-        print(f"working on dataset {i+1} out of  {len(datasets)}: {item}")
-
-        ds = xr.open_zarr(item.url)
-        ds_downscaled = down_scale_on_the_fly(
-            ds=ds,
-            resampler=resampler
-        )
-
-        my_store.write_zarr(
-            dataset=ds_downscaled,
-            name=f"EDITO_DUC_{item.dataset}.zarr"
-        )
+    # # downscale datasets on the fly
+    # datasets = pd.read_csv("datasets.csv")
+    #
+    # for i, item in enumerate(datasets.itertuples()):
+    #     print(f"working on dataset {i+1} out of  {len(datasets)}: {item}")
+    #
+    #     ds = xr.open_zarr(item.url)
+    #     ds_downscaled = down_scale_on_the_fly(
+    #         ds=ds,
+    #         resampler=resampler
+    #     )
+    #
+    #     my_store.write_zarr(
+    #         dataset=ds_downscaled,
+    #         name=f"EDITO_DUC_{item.dataset}.zarr"
+    #     )
 
     # -------------------------------------------------------------------------
     # downscale big dataset in batches

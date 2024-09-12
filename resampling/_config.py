@@ -21,10 +21,20 @@ class Config:
     Config class.
     """
 
-    def __init__(self):
-        self._config_file = os.path.join(
+    def __init__(self, config_file=None):
+        """
+        Initializes the Config object.
+
+        :param config_file: Optional; Path to the configuration file.
+            If not provided, defaults to 'config/config.toml'.
+        """
+        # If no config file is provided, default to 'config/config.toml'
+        self._config_file = config_file or os.path.join(
             os.path.dirname(os.path.abspath(__file__)),
-            "config/config.toml")
+            "config/config.toml"
+        )
+
+        # Set up the config using the file
         self._set_config(self._config_file)
 
     @property
