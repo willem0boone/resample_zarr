@@ -1,3 +1,4 @@
+import time
 import numpy as np
 import xarray as xr
 import pandas as pd
@@ -94,7 +95,10 @@ def down_scale_in_batches(
     variables: List[str],
     batch_size: int,
     workers: int,
-    logs: Optional[bool] = True
+    logs: Optional[bool] = True,
+    over_write: Optional[bool] = True,
+    start_batch: Optional[int] = None,
+    end_batch: Optional[int] = None,
 ) -> None:
     """
     Downscale the dataset in batches and store the results in a Zarr format.
@@ -156,6 +160,11 @@ def down_scale_in_batches(
        * Writing the downscaled data to the Zarr store in batches.
     5. Logs the progress and completion of each batch and variable.
     """
+    if start_batch is None:
+        start_batch = 0  # Start from the beginning
+    if end_batch is None:
+        end_batch = float('inf')
+
     if logs:
         resource_monitor = ResourceMonitor()
         resource_monitor.start_monitor_resources()
@@ -166,12 +175,13 @@ def down_scale_in_batches(
     windows, indices, dimensions = define_windows(resampler, ds)
 
     # Check if the target Zarr store exists
-    exists = my_store.check_zarr_exists(dest_zarr)
-    if exists:
-        if logs:
-            logger.info(f"{dest_zarr} already exists, it will be deleted and"
-                        f" a new empyt zarr will be created")
-        my_store.delete_zarr(dest_zarr)
+    if over_write:
+        exists = my_store.check_zarr_exists(dest_zarr)
+        if exists:
+            if logs:
+                logger.info(f"{dest_zarr} already exists, it will be deleted and"
+                            f" a new empyt zarr will be created")
+            my_store.delete_zarr(dest_zarr)
 
     my_store.create_empty_zarr(zarr_name=dest_zarr,
                                coordinate_ranges=dimensions,
@@ -182,6 +192,12 @@ def down_scale_in_batches(
         for i in range(0, total_windows, batch_size):
 
             batch_i = int(i / batch_size)
+            print(batch_i)
+
+            if not start_batch <= batch_i <= end_batch:
+                print('skip')
+                continue
+
             batch_n = int(np.ceil(total_windows / batch_size))
             if logs:
                 logger.info(f">> Working on VAR {variable} - "
@@ -197,6 +213,12 @@ def down_scale_in_batches(
                                         workers=workers,
                                         offset=i,
                                         )
+            # means = _get_means_looped(ds=ds,
+            #                           var=variable,
+            #                           windows=batch_of_windows,
+            #                           offset=i)
+            print("__")
+            print(means)
 
             # Write the batch to the Zarr store
             my_store.write_zarr_batch(
@@ -262,24 +284,52 @@ def _slice_dataset(ds: xr.Dataset,
     return sliced_ds
 
 
-@retry(stop=stop_after_attempt(5),
-       wait=wait_exponential(multiplier=1, min=4, max=10))
-def _process_window(i, window, var, ds, offset):
+# @retry(stop=stop_after_attempt(5),
+#        wait=wait_exponential(multiplier=1, min=4, max=10))
+def _process_window(i, window, var, ds, offset, max_retries=5, retry_delay=10):
+    print(window)
     global_counter = i + offset
-    sliced_ds = _slice_dataset(ds, window)
-    if var in sliced_ds:
-        values = sliced_ds[var].values
-        if len(values) == 0 or np.isnan(values).all():
-            mean = np.nan
-        else:
-            mean = np.nanmean(values)
-    else:
-        mean = np.nan
-    return global_counter, mean
+    retries = 0
+
+    while retries < max_retries:
+        try:
+            sliced_ds = _slice_dataset(ds, window)
+            # print(sliced_ds)
+            if var in sliced_ds:
+                # print(1)
+                values = sliced_ds[var].values
+                # print('-')
+                if len(values) == 0 or np.isnan(values).all():
+                    # print(2)
+                    mean = np.nan
+                else:
+                    mean = np.nanmean(values)
+                    # print(3)
+            else:
+                mean = np.nan
+            # print(global_counter)
+            # print(mean)
+            return global_counter, mean
+
+        except Exception as e:
+            # print('going in exception')
+            # print(e)
+            retries += 1
+            if retries >= max_retries:
+                mean = np.nan
+                print(f"Error in process window {window}")
+                print(e)
+                return global_counter, mean
+            else:
+                print(e)
+                print(f"Error in process window {window}.")
+                print(e)
+                print(f"Retrying ({retries}/{max_retries})...")
+                time.sleep(retry_delay)
 
 
-@retry(stop=stop_after_attempt(5),
-       wait=wait_exponential(multiplier=1, min=4, max=10))
+# @retry(stop=stop_after_attempt(5),
+#        wait=wait_exponential(multiplier=1, min=4, max=10))
 def _get_means_threaded(ds, var, windows, workers, offset=0):
     results = [None] * len(windows)
     with ThreadPoolExecutor(max_workers=workers) as executor:
@@ -306,3 +356,23 @@ def _get_means_threaded(ds, var, windows, workers, offset=0):
     return means
 
 
+def _get_means_looped(ds, var, windows, offset=0):
+    results = [None] * len(windows)
+
+    # Using a simple for loop to process each window sequentially
+    for i, window in enumerate(windows):
+        try:
+            global_counter, result = _process_window(i, window, var, ds, offset)
+            results[global_counter - offset] = result
+        except RecursionError as e:
+            print(f"RecursionError encountered: {e}")
+            raise
+        except Exception as e:
+            print(f"Error encountered: {e}")
+            raise
+
+    # Convert the results to a NumPy array and handle NaN values
+    means = np.array(results)
+    means = np.where(np.isnan(means), np.nan, means.astype(float))
+
+    return means

@@ -68,7 +68,7 @@ def expand_to_global_coverage(
     # Create a new xarray dataset with global coverage
     global_ds = xr.Dataset(global_data)
 
-    print(f"{global_ds=}")
+    # print(f"{global_ds=}")
 
     # Extract the original coordinates
     original_lat = ds['latitude'].values
@@ -83,10 +83,14 @@ def expand_to_global_coverage(
     # Assign the original data to the corresponding location in the global
     # dataset
     for var_name in ds.data_vars:
+        # print(var_name)
         original_data = ds[var_name].values
         original_data = np.flip(original_data, axis=0)
-        global_ds[var_name][lat_start_idx: lat_end_idx,
-        lon_start_idx:lon_end_idx] = original_data
+        # print(original_data)
+        # print("°"*50)
+        # print(lat_start_idx, lat_end_idx)
+        # print(lon_start_idx, lon_end_idx)
+        global_ds[var_name][lat_start_idx: lat_end_idx, lon_start_idx:lon_end_idx] = original_data
     return global_ds
 
 

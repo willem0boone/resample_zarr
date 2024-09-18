@@ -25,8 +25,8 @@ def get_my_store(config_file=None):
         raise
 
     # Display the loaded configuration for debugging purposes
-    print("Credentials for object store:")
-    pprint(config.settings)
+    # print("Credentials for object store:")
+    # pprint(config.settings)
 
     # Initialize ObjectStore with credentials from the config
     my_store = ObjectStore(
