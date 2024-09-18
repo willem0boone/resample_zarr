@@ -1,15 +1,18 @@
 Usage
 =====
 
-.. _installation:
+This page contains examples for both downsampling and creating pyramids. The
+examples are also available in notebooks on the
+`github page <https://github.com/willem0boone/Edito_resampling_datasets/tree/
+main/notebooksL>`_
 
-Installation
-------------
 
-To be developed.
+Contents
+--------
 
-Resampling datasets
--------------------
+.. toctree::
+   :maxdepth: 1
+   :titlesonly:
 
-To be developed.
-
+   resampling
+   pyramids

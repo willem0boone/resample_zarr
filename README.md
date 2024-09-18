@@ -1,3 +1,4 @@
+[![DOI](https://sandbox.zenodo.org/badge/851485026.svg)](https://handle.stage.datacite.org/10.5072/zenodo.109216)
 # Edito Resampling datasets
 
 ## About

@@ -15,7 +15,7 @@
     "@type": "ComputerLanguage",
     "name": "Python",
     "url": "https://www.python.org/"
-    },
+    }
    ],
   "operatingSystem": "Windows 11",
   "runtimePlatform": ["Python 3.12.1"],
@@ -180,7 +180,7 @@
       "name": "xarray_datatree",
       "version": "0.0.14"
     }
-  }
+  },
   "keywords": ["resampling", "zarr", "EDITO-INFRA"],
   "readme": "https://github.com/willem0boone/Edito_resampling_datasets/blob/main/README.md"
 }

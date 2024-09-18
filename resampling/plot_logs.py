@@ -95,7 +95,7 @@ def _parse_event_log(logfile: Optional[str] = 'log_events.log'
     return df
 
 
-def plot_resource_log(
+def _plot_resource_log(
         logfile: Optional[str] = 'log_resources.log'
 ) -> None:
     """
@@ -159,7 +159,7 @@ def plot_resource_log(
     plt.close()
 
 
-def plot_event_log(
+def _plot_event_log(
         logfile: Optional[str] = 'log_events.log'
 ) -> None:
     """

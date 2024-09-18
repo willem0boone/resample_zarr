@@ -1,7 +1,31 @@
-resampling package
+API
 ==================
 
-resampling.down\_scale
+object_store
+-----------------------------
+
+.. automodule:: resampling.object_store
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+my_store
+-----------------------------
+
+.. automodule:: resampling.my_store
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+define_windows
+-----------------------------
+
+.. automodule:: resampling.define_windows
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+down\_scale
 -----------------------------
 
 .. automodule:: resampling.down_scale
@@ -9,31 +33,7 @@ resampling.down\_scale
    :undoc-members:
    :show-inheritance:
 
-resampling.extract
--------------------------
-
-.. automodule:: resampling.extract
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-resampling.load
-----------------------
-
-.. automodule:: resampling.load
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-resampling.loggers
--------------------------
-
-.. automodule:: resampling.loggers
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-resampling.plot\_logs
+plot\_logs
 ----------------------------
 
 .. automodule:: resampling.plot_logs
@@ -41,7 +41,7 @@ resampling.plot\_logs
    :undoc-members:
    :show-inheritance:
 
-resampling.plot\_zarr
+plot\_zarr
 ----------------------------
 
 .. automodule:: resampling.plot_zarr
@@ -49,7 +49,7 @@ resampling.plot\_zarr
    :undoc-members:
    :show-inheritance:
 
-resampling.transform
+transform
 ---------------------------
 
 .. automodule:: resampling.transform
