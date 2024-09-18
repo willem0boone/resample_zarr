@@ -14,5 +14,5 @@ Contents
    :maxdepth: 1
    :titlesonly:
 
-   downscaling
+   resampling
    pyramids

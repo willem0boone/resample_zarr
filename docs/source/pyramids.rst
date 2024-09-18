@@ -1,5 +1,6 @@
 Make Pyramid
 ============
+
 Implement `ndpyramid <https://github.com/carbonplan/ndpyramid/tree/main>`_
 (Credit: Carbonplan) to create a pyramid datatree.datatree 'pyramid' in which
 each level has a higher resolution. Such pyramids are compatible with several
@@ -29,6 +30,7 @@ Import Resampling modules
 
 2. Load datasets
 ----------------
+
 .. code-block:: python
 
     def extract_all_ds():
@@ -61,10 +63,13 @@ Import Resampling modules
 .. code-block:: python
 
     ds = extract_all_ds()
+
 3. Convert datasets
 -------------------
+
 Ensure global coverage
 ^^^^^^^^^^^^^^^^^^^^^^
+
 Expand to global coverage, make sure the lat & lon step are conform the lat/lon
 resolution of the dataset. Carbonplan maps requires the datasets to have a
 global extend. Therefore the function *expand_to_global_coverage* can be used.
@@ -81,6 +86,7 @@ high to low while the plot uses low to high. so the plotting of the map is
 mirrored but it doesn't affect the dataset and pyramid building.
 Create pyramid
 ^^^^^^^^^^^^^^
+
 .. code-block:: python
 
     merged_pyramid = make_pyramid(
@@ -92,13 +98,15 @@ Create pyramid
 
 4. Extract
 ----------
+
 .. code-block:: python
 
     my_store = get_my_store()
     my_store.write_zarr(merged_pyramid, name="tutorial_pyramid.zarr")
 
 5. Make data public accessible
------------------------------
+------------------------------
+
 Run this command in a terminal in the datalab to make your dataset public
 available:
 .. code-block:: console
