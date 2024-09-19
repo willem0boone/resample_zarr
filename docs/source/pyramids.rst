@@ -84,6 +84,7 @@ latitude/longitude as geographical coordinates. On the y axis, coordinates go
 from 1800 (north pole> to 900 (equator> to 0 (south pole>. Notice that this is
 high to low while the plot uses low to high. so the plotting of the map is
 mirrored but it doesn't affect the dataset and pyramid building.
+
 Create pyramid
 ^^^^^^^^^^^^^^
 

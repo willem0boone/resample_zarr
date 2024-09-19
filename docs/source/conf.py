@@ -30,8 +30,9 @@ def extract_version_from_file(file_path):
 # release = '0.1'
 # version = '0.1.0'
 
-codemeta = "../codemeta.json"
+codemeta = "../../codemeta.json"
 version = extract_version_from_file(codemeta)
+
 
 # -- General configuration
 
