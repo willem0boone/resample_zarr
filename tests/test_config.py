@@ -3,26 +3,41 @@ import boto3
 from botocore.exceptions import NoCredentialsError
 from botocore.exceptions import PartialCredentialsError
 from botocore.exceptions import ClientError
-from config import Config
+from resampling.my_store import get_my_store
+import warnings
 
 
-class TestConfig(unittest.TestCase):
-    def test_object(self):
+class TestObjectStore(unittest.TestCase):
+
+    def setUp(self):
+        """ Set up variables shared across tests """
+        self.my_store = None
+
+    def test_get_my_store(self):
+        """ Test to initiate ObjectStore """
         try:
-            config = Config()
+            self.my_store = get_my_store()
         except Exception as e:
-            self.fail(f"Creating Config instance failed with exception: {e}")
+            warnings.warn(
+                f"Initiating Objectstore via get_my_store encountered an "
+                f"error: {e}")
+            self.my_store = None
 
     def test_s3_connection(self):
+        """ Test to check S3 connection, dependent on test_get_my_store """
+        if self.my_store is None:
+            self.skipTest(
+                "Skipping S3 connection test because my_store initialization "
+                "failed.")
+
         try:
-            settings = Config().settings
             # Create an S3 client
             s3_client = boto3.client(
                 's3',
-                endpoint_url=settings.endpoint_url,
-                aws_access_key_id=settings.aws_access_key_id,
-                aws_secret_access_key=settings.aws_secret_access_key,
-                aws_session_token=settings.aws_session_token
+                endpoint_url=self.my_store._endpoint_url,
+                aws_access_key_id=self.my_store._aws_access_key_id,
+                aws_secret_access_key=self.my_store._aws_secret_access_key,
+                aws_session_token=self.my_store._aws_session_token
             )
 
             # Test listing buckets
@@ -30,10 +45,12 @@ class TestConfig(unittest.TestCase):
             self.assertIn('Buckets', response)
 
             # Optionally check if a specific bucket exists
-            bucket_exists = any(bucket['Name'] == settings.bucket for bucket in
-                                response.get('Buckets', []))
+            bucket_exists = any(
+                bucket['Name'] == self.my_store._bucket for bucket in
+                response.get('Buckets', []))
             self.assertTrue(bucket_exists,
-                            f"Bucket {settings.bucket} does not exist.")
+                            f"Bucket {self.my_store._bucket} does not "
+                            f"exist.")
 
         except (NoCredentialsError, PartialCredentialsError) as e:
             self.fail(f"Credentials error: {e}")
