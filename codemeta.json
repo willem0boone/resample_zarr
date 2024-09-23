@@ -8,8 +8,8 @@
   "issueTracker": "https://github.com/willem0boone/Edito_resampling_datasets/issues",
   "license": "MIT License",
   "version": "1.0.0",
-  "datePublished": "",
-  "dateModified": "",
+  "datePublished": "2024-09",
+  "dateModified": "2024-09",
   "programmingLanguage": [
     {
     "@type": "ComputerLanguage",
@@ -31,7 +31,8 @@
       "givenName": "Willem",
       "familyName": "Boone",
       "email": "willem.boone@vliz.be",
-      "@id": "https://orcid.org/0009-0008-0916-6847"
+      "@id": "https://orcid.org/0009-0008-0916-6847",
+      "orcid": "https://orcid.org/0009-0008-0916-6847",
     }
   ],
   "copyrightHolder": [
@@ -40,7 +41,8 @@
       "givenName": "Willem",
       "familyName": "Boone",
       "email": "willem.boone@vliz.be",
-      "@id": "https://orcid.org/0009-0008-0916-6847"
+      "@id": "https://orcid.org/0009-0008-0916-6847",
+      "orcid": "https://orcid.org/0009-0008-0916-6847"
     }
   ],
   "funder": [
@@ -56,7 +58,8 @@
       "givenName": "Willem",
       "familyName": "Boone",
       "email": "willem.boone@vliz.be",
-      "@id": "https://orcid.org/0009-0008-0916-6847"
+      "@id": "https://orcid.org/0009-0008-0916-6847",
+      "orcid": "https://orcid.org/0009-0008-0916-6847",
     }
   ],
  "softwareRequirements": {
