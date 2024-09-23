@@ -47,7 +47,6 @@ This work is available on
 .
 
 ## How to use
-- resampling: package, pip install & documentation will follow. 
-- notebooks: example .ipynb of downscaling & creating pyramids.
-- pipeline_edito: .py scripts for processing as it was done for the DUC.
-- tests: testing modules in resampling package. 
+- See [Read the docs](https://edito-resampling-datasets.readthedocs.io/en/latest/usage.html) for install & usage.
+- [Notebooks](https://github.com/willem0boone/Edito_resampling_datasets/tree/main/notebooks): example .ipynb for downscaling & creating pyramids.
+- [pipeline_edito](https://github.com/willem0boone/Edito_resampling_datasets/tree/main/pipeline_edito_T7.3): .py scripts for processing as it was done for the DUC.
