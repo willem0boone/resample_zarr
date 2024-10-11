@@ -22,8 +22,6 @@ Import Resampling modules
 
 .. code-block:: python
 
-    parent_dir = Path().resolve().parent
-    sys.path.append(str(parent_dir))
     from resampling.my_store import get_my_store
     from resampling.transform import make_pyramid
     from resampling.transform import expand_to_global_coverage
