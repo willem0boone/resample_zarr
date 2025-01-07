@@ -147,7 +147,7 @@ def _get_missing_dimensions(
     return dimensions, dimension_indices
 
 
-def define_windows(
+def _define_windows(
         resampler: List[Dict[str, Any]],
         ds: xr.Dataset
     ) -> Tuple[
@@ -160,12 +160,15 @@ def define_windows(
     resampler configuration, and includes any dimensions present in the dataset
     but not specified in the resampler.
 
-    :param resampler: A list of dictionaries specifying the resampling parameters for each dimension.
+    :param resampler: A list of dictionaries specifying the resampling
+    parameters for each dimension.
         Each dictionary must include:
         * **dimension** (str): The name of the dimension to resample.
         * **step** (float): The step size for the resampling.
-        * **range** (Tuple[float, float]): The range of values for the dimension as (start, end).
-        * **invert** (bool, optional): Whether to invert the dimension coordinates. Defaults to False.
+        * **range** (Tuple[float, float]): The range of values for the
+        dimension as (start, end).
+        * **invert** (bool, optional): Whether to invert the dimension
+        coordinates. Defaults to False.
 
     :type resampler: List[Dict[str, Any]]
 
@@ -222,8 +225,4 @@ def define_windows(
     ]
 
     return dims_with_coords, dims_with_indices, dimensions
-
-
-
-
 

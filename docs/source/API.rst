@@ -9,21 +9,6 @@ object_store
    :undoc-members:
    :show-inheritance:
 
-my_store
------------------------------
-
-.. automodule:: resampling.my_store
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-define_windows
------------------------------
-
-.. automodule:: resampling.define_windows
-   :members:
-   :undoc-members:
-   :show-inheritance:
 
 down\_scale
 -----------------------------
