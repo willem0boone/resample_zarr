@@ -17,7 +17,7 @@ from concurrent.futures import ThreadPoolExecutor
 from resampling._loggers import setup_logger
 from resampling._loggers import ResourceMonitor
 from resampling.object_store import ObjectStore
-from resampling.define_windows import define_windows
+from resampling._define_windows import _define_windows
 
 
 def down_scale_on_the_fly(
@@ -172,7 +172,7 @@ def down_scale_in_batches(
 
         logger.info(f"Downscaling to dataset: {dest_zarr}")
 
-    windows, indices, dimensions = define_windows(resampler, ds)
+    windows, indices, dimensions = _define_windows(resampler, ds)
 
     # Check if the target Zarr store exists
     if over_write:
@@ -192,10 +192,10 @@ def down_scale_in_batches(
         for i in range(0, total_windows, batch_size):
 
             batch_i = int(i / batch_size)
-            print(batch_i)
+            # print(batch_i)
 
             if not start_batch <= batch_i <= end_batch:
-                print('skip')
+                # print('skip')
                 continue
 
             batch_n = int(np.ceil(total_windows / batch_size))
@@ -203,6 +203,10 @@ def down_scale_in_batches(
                 logger.info(f">> Working on VAR {variable} - "
                             f"batch {batch_i + 1}/{batch_n}:"
                             f"windows [{i}-{i + batch_size}]/{total_windows}")
+
+                print(f">> Working on VAR {variable} - "
+                      f"batch {batch_i + 1}/{batch_n}:"
+                      f"windows [{i}-{i + batch_size}]/{total_windows}")
 
             batch_of_windows = windows[i:i + batch_size]
             batch_of_indices = indices[i:i + batch_size]
@@ -217,8 +221,8 @@ def down_scale_in_batches(
             #                           var=variable,
             #                           windows=batch_of_windows,
             #                           offset=i)
-            print("__")
-            print(means)
+            # print("__")
+            # print(means)
 
             # Write the batch to the Zarr store
             my_store.write_zarr_batch(
@@ -287,7 +291,7 @@ def _slice_dataset(ds: xr.Dataset,
 # @retry(stop=stop_after_attempt(5),
 #        wait=wait_exponential(multiplier=1, min=4, max=10))
 def _process_window(i, window, var, ds, offset, max_retries=5, retry_delay=10):
-    print(window)
+    # print(window)
     global_counter = i + offset
     retries = 0
 

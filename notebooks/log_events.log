@@ -1,17 +1,17 @@
-2024-09-06 14:31:01,920 - >> Working on VAR elevation - batch 1/16:windows [0-500]/8000
-2024-09-06 14:31:22,045 - >> Working on VAR elevation - batch 2/16:windows [500-1000]/8000
-2024-09-06 14:31:43,084 - >> Working on VAR elevation - batch 3/16:windows [1000-1500]/8000
-2024-09-06 14:31:58,311 - >> Working on VAR elevation - batch 4/16:windows [1500-2000]/8000
-2024-09-06 14:32:12,687 - >> Working on VAR elevation - batch 5/16:windows [2000-2500]/8000
-2024-09-06 14:32:36,822 - >> Working on VAR elevation - batch 6/16:windows [2500-3000]/8000
-2024-09-06 14:32:52,920 - >> Working on VAR elevation - batch 7/16:windows [3000-3500]/8000
-2024-09-06 14:33:04,540 - >> Working on VAR elevation - batch 8/16:windows [3500-4000]/8000
-2024-09-06 14:33:13,786 - >> Working on VAR elevation - batch 9/16:windows [4000-4500]/8000
-2024-09-06 14:33:22,213 - >> Working on VAR elevation - batch 10/16:windows [4500-5000]/8000
-2024-09-06 14:33:32,174 - >> Working on VAR elevation - batch 11/16:windows [5000-5500]/8000
-2024-09-06 14:33:46,585 - >> Working on VAR elevation - batch 12/16:windows [5500-6000]/8000
-2024-09-06 14:34:00,850 - >> Working on VAR elevation - batch 13/16:windows [6000-6500]/8000
-2024-09-06 14:34:18,050 - >> Working on VAR elevation - batch 14/16:windows [6500-7000]/8000
-2024-09-06 14:34:42,766 - >> Working on VAR elevation - batch 15/16:windows [7000-7500]/8000
-2024-09-06 14:35:03,800 - >> Working on VAR elevation - batch 16/16:windows [7500-8000]/8000
-2024-09-06 14:35:11,905 - >> Finished VAR elevation
+2025-01-07 16:47:52,203 - >> Working on VAR elevation - batch 1/16:windows [0-500]/8000
+2025-01-07 16:48:10,598 - >> Working on VAR elevation - batch 2/16:windows [500-1000]/8000
+2025-01-07 16:48:30,208 - >> Working on VAR elevation - batch 3/16:windows [1000-1500]/8000
+2025-01-07 16:48:45,902 - >> Working on VAR elevation - batch 4/16:windows [1500-2000]/8000
+2025-01-07 16:49:00,454 - >> Working on VAR elevation - batch 5/16:windows [2000-2500]/8000
+2025-01-07 16:49:16,662 - >> Working on VAR elevation - batch 6/16:windows [2500-3000]/8000
+2025-01-07 16:49:33,392 - >> Working on VAR elevation - batch 7/16:windows [3000-3500]/8000
+2025-01-07 16:49:47,904 - >> Working on VAR elevation - batch 8/16:windows [3500-4000]/8000
+2025-01-07 16:49:58,557 - >> Working on VAR elevation - batch 9/16:windows [4000-4500]/8000
+2025-01-07 16:50:08,553 - >> Working on VAR elevation - batch 10/16:windows [4500-5000]/8000
+2025-01-07 16:50:20,242 - >> Working on VAR elevation - batch 11/16:windows [5000-5500]/8000
+2025-01-07 16:50:34,372 - >> Working on VAR elevation - batch 12/16:windows [5500-6000]/8000
+2025-01-07 16:50:51,171 - >> Working on VAR elevation - batch 13/16:windows [6000-6500]/8000
+2025-01-07 16:51:08,932 - >> Working on VAR elevation - batch 14/16:windows [6500-7000]/8000
+2025-01-07 16:51:29,304 - >> Working on VAR elevation - batch 15/16:windows [7000-7500]/8000
+2025-01-07 16:51:48,755 - >> Working on VAR elevation - batch 16/16:windows [7500-8000]/8000
+2025-01-07 16:51:58,512 - >> Finished VAR elevation

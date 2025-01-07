@@ -1,9 +1,8 @@
-from resampling.object_store import ObjectStore
 from resampling._config import Config
-from pprint import pprint
+from resampling.object_store import ObjectStore
 
 
-def get_my_store(config_file=None):
+def store_from_config(config_file: str) -> ObjectStore:
     """
     A function that initiates an ObjectStore instance based on credentials
     stored in the config file. If no config file is given, it defaults to

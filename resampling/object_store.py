@@ -1,6 +1,5 @@
 import s3fs
 import xarray
-import datatree
 import numpy as np
 import xarray as xr
 import datetime as dt
@@ -69,6 +68,7 @@ class ObjectStore:
         self._aws_session_token = aws_session_token
         self._bucket = bucket
         self._setup_s3fs()
+        self._test_connection()
 
     def _setup_s3fs(self):
         """
@@ -82,6 +82,34 @@ class ObjectStore:
             token=self._aws_session_token,
             client_kwargs={'endpoint_url': self._endpoint_url}
         )
+
+    def _test_connection(self):
+        """
+        Test to check S3 connection using s3fs.
+        This method verifies the connection to the S3 bucket by attempting to
+        list the contents of the bucket.
+        """
+        try:
+            bucket_contents = self._s3.ls(self._bucket)
+
+            if not bucket_contents:
+                pass
+                # print(
+                #     f"Bucket {self._bucket} is empty, but the connection is "
+                #     f"successful.")
+            else:
+                pass
+                # print(f"Bucket {self._bucket} contains: {bucket_contents}")
+
+            # print("S3 connection test passed.")
+
+        except FileNotFoundError:
+            raise RuntimeError(
+                f"Bucket {self._bucket} does not exist or is inaccessible.")
+
+        except Exception as e:
+            raise RuntimeError(
+                f"An unexpected error occurred during S3 connection test: {e}")
 
     def extract_zarr(
             self,
@@ -170,7 +198,7 @@ class ObjectStore:
 
     def write_zarr(
             self,
-            dataset: datatree.DataTree | xr.Dataset,
+            dataset: xr.DataTree | xr.Dataset,
             name: Optional[str] = None,
             mode: Optional[str] = None,
     ) -> None:
