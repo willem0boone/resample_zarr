@@ -8,7 +8,7 @@ Using pip install:
 
 .. code-block:: console
 
-    pip install -q "git+https://github.com/willem0boone/Edito_resampling_datasets#egg=resampling[git_deps]"
+    pip install -q "pip install -q "git+https://github.com/willem0boone/resample_zarr#egg=resampling"
 
 
 Configuration
