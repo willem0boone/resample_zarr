@@ -9,7 +9,7 @@ def expand_to_global_coverage(ds, step_lon, step_lat):
     aligning the original coordinates with the global grid.
 
     :param ds: Input xarray.Dataset with latitude, longitude, and data
-    variables.
+        variables.
     :param step_lon: Longitude resolution for the global dataset.
     :param step_lat: Latitude resolution for the global dataset.
     :return: Expanded xarray.Dataset with global coverage.
