@@ -12,11 +12,11 @@
   "dateModified": "2024-09",
   "programmingLanguage": [
     {
-    "@type": "ComputerLanguage",
-    "name": "Python",
-    "url": "https://www.python.org/"
+      "@type": "ComputerLanguage",
+      "name": "Python",
+      "url": "https://www.python.org/"
     }
-   ],
+  ],
   "operatingSystem": "Windows 11",
   "runtimePlatform": ["Python 3.12.1"],
   "provider": {
@@ -26,13 +26,13 @@
     "url": "https://vliz.be/en"
   },
   "contributor": [
-      {
+    {
       "@type": "Person",
       "givenName": "Willem",
       "familyName": "Boone",
       "email": "willem.boone@vliz.be",
       "@id": "https://orcid.org/0009-0008-0916-6847",
-      "orcid": "https://orcid.org/0009-0008-0916-6847",
+      "orcid": "https://orcid.org/0009-0008-0916-6847"
     }
   ],
   "copyrightHolder": [
@@ -59,7 +59,7 @@
       "familyName": "Boone",
       "email": "willem.boone@vliz.be",
       "@id": "https://orcid.org/0009-0008-0916-6847",
-      "orcid": "https://orcid.org/0009-0008-0916-6847",
+      "orcid": "https://orcid.org/0009-0008-0916-6847"
     }
   ],
   "softwareRequirements": {

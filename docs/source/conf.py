@@ -32,6 +32,7 @@ def extract_version_from_file(file_path):
 
 codemeta = "../../codemeta.json"
 version = extract_version_from_file(codemeta)
+# print(version)
 
 
 # -- General configuration
