@@ -34,10 +34,10 @@ plot\_zarr
    :undoc-members:
    :show-inheritance:
 
-transform
+make_global
 ---------------------------
 
-.. automodule:: resampling.transform
+.. automodule:: resampling.make_global
    :members:
    :undoc-members:
    :show-inheritance:

@@ -1,6 +1,7 @@
 */.ipynb_checkpoints/
 *.zarr
 .zarr
+.toml
 *.png
 .png
 .idea
