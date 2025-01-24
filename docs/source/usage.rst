@@ -26,8 +26,8 @@ config.toml.
 .. code-block:: python
 
     from resampling.plot_logs import plot_logs
-    from resampling.my_store import get_my_store
     from resampling.plot_zarr import plot_dataset
+    from resampling.my_store import store_from_config
     from resampling.down_scale import down_scale_in_batches
     from resampling.down_scale import down_scale_on_the_fly
 
@@ -41,35 +41,27 @@ For IO with your S3 storage, the :class:`resampling.object_store.ObjectStore`
 class is used. The initiation of this class requires your S3 credentials.
 
 You can configure this package by storing your S3 credentials in a config file.
-Doing so, you can use :func:`resampling.my_store.get_my_store` to  create an
+Doing so, you can use :func:`resampling.my_store.store_from_config` to  create an
 instance of :class:`resampling.object_store.ObjectStore`.
 
-:func:`resampling.my_store.get_my_store` will look by default at a
-config file stored at:
-
-    resampling/config/config.toml
+:func:`resampling.my_store.get_my_store` requires a .toml config file.
 
 .. code-block:: python
 
-    my_store = get_my_store()
+    my_store = store_from_config("config.toml")
 
-However, you can also provide your own config.toml file.
-
-.. code-block:: python
-
-    my_store = get_my_store('path/to/my_config.toml')
-
-
-The content of the file should look like this:
+This is how the config.toml should look like:
 
 .. code-block:: python
 
-    endpoint_url=''
+    endpoint_url='https://minio.dive.edito.eu/'
     bucket=''
     aws_access_key_id=''
     aws_secret_access_key=''
     aws_session_token=''
 
+Notice to not expose your credentials or use credentials that are valid for
+limited time (e.g. 24h).
 
 Alternatively, you can initiate :class:`resampling.object_store.ObjectStore`
 manually as follows:

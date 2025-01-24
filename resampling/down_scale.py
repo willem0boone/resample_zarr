@@ -63,7 +63,8 @@ def down_scale_on_the_fly(
 
         if new_coords[dimension].size == 0:
             raise ValueError(
-                f"Generated new coordinates for {dimension} are empty. Check the range and step values.")
+                f"Generated new coordinates for {dimension} are empty. "
+                f"Check the range and step values.")
 
         # Reverse the coordinates if invert is True
         if invert:
@@ -145,6 +146,21 @@ def down_scale_in_batches(
         Whether to log progress messages. Defaults to True.
     :type logs: Optional[bool]
 
+    :param over_write:
+        Whether to overwrite an existing Zarr store. If set to True, the
+        existing store will be deleted and recreated. Defaults to True.
+    :type over_write: Optional[bool]
+
+    :param start_batch:
+        The starting batch index to process. If specified, the function will
+        only process batches from this index onward. Defaults to None.
+    :type start_batch: Optional[int]
+
+    :param end_batch:
+        The ending batch index to process. If specified, the function will stop
+         processing after this batch. Defaults to None.
+    :type end_batch: Optional[int]
+
     :return:
         None
     :rtype: None
@@ -175,17 +191,23 @@ def down_scale_in_batches(
     windows, indices, dimensions = _define_windows(resampler, ds)
 
     # Check if the target Zarr store exists
-    if over_write:
-        exists = my_store.check_zarr_exists(dest_zarr)
-        if exists:
-            if logs:
-                logger.info(f"{dest_zarr} already exists, it will be deleted and"
-                            f" a new empyt zarr will be created")
-            my_store.delete_zarr(dest_zarr)
 
-    my_store.create_empty_zarr(zarr_name=dest_zarr,
-                               coordinate_ranges=dimensions,
-                               variables=variables)
+    exists = my_store.check_zarr_exists(dest_zarr)
+    if exists:
+        if over_write:
+            if logs:
+                logger.info(
+                    f"{dest_zarr} already exists, it will be deleted and"
+                    f" a new empyt zarr will be created")
+            my_store.delete_zarr(dest_zarr)
+            my_store.create_empty_zarr(zarr_name=dest_zarr,
+                                       coordinate_ranges=dimensions,
+                                       variables=variables)
+    else:
+        my_store.create_empty_zarr(zarr_name=dest_zarr,
+                                   coordinate_ranges=dimensions,
+                                   variables=variables)
+
     total_windows = len(windows)
 
     for variable in variables:
